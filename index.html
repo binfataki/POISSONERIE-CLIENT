@@ -93,16 +93,15 @@
     aspect-ratio: 4 / 3; background: var(--ocean-soft); position:relative; overflow:hidden;
   }
   .card .img-wrap img{ width:100%; height:100%; object-fit:cover; }
-  .card .img-wrap .unavailable-veil{
-    position:absolute; inset:0; background: rgba(11,42,74,.55);
-    display:flex; align-items:center; justify-content:center;
-  }
-  .card .img-wrap .unavailable-veil span{
-    background: var(--sunset); color:#fff; font-size:.72rem; font-weight:700;
-    padding:5px 12px; border-radius:999px; letter-spacing:.02em;
-  }
+  .card .img-wrap.hidden{ display:none; }
   .card .body{ padding:14px 15px 16px; display:flex; flex-direction:column; gap:8px; flex:1; }
-  .card .name{ font-family:'Fraunces',serif; font-weight:600; font-size:1.04rem; color: var(--ink); line-height:1.25; }
+  .card.is-unavailable .body{ padding-top:16px; }
+  .card .name{ font-family:'Fraunces',serif; font-weight:600; font-size:1.04rem; color: var(--ink); line-height:1.25; display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+  .card .sold-out-badge{
+    background: var(--sunset); color:#fff; font-size:.66rem; font-weight:700;
+    padding:4px 10px; border-radius:999px; letter-spacing:.02em; font-family:'Inter',sans-serif;
+    white-space:nowrap;
+  }
   .card .desc{ font-size:.82rem; color: var(--ink-soft); line-height:1.4; }
   .card .price-row{ display:flex; align-items:baseline; justify-content:space-between; margin-top:auto; padding-top:4px; }
   .card .price{ font-family:'Fraunces',serif; font-weight:700; font-size:1.15rem; color: var(--navy); }
@@ -114,7 +113,7 @@
     padding:11px 14px; font-weight:700; font-size:.88rem; cursor:pointer; text-decoration:none;
   }
   .card .wa-btn svg{ width:16px; height:16px; flex-shrink:0; }
-  .card.is-unavailable .wa-btn{ background: var(--ocean-soft); color: var(--ink-soft); pointer-events:none; }
+  .card .wa-btn.is-disabled{ background: var(--ocean-soft); color: var(--ink-soft); pointer-events:none; }
 
   .empty{ text-align:center; padding:50px 20px; color: var(--ink-soft); }
 
@@ -154,8 +153,26 @@
     width:100%; padding:12px 13px; border-radius: var(--radius-sm); border:1.5px solid var(--line);
     background:#fff; font-size:1rem; color: var(--ink); outline:none;
   }
-  .field input:focus{ border-color: var(--ocean); }
+  .field input, .field select, .field textarea{
+    width:100%; padding:12px 13px; border-radius: var(--radius-sm); border:1.5px solid var(--line);
+    background:#fff; font-size:1rem; color: var(--ink); outline:none; font-family:inherit;
+  }
+  .field select{ appearance:none; }
+  .field input:focus, .field select:focus, .field textarea:focus{ border-color: var(--ocean); }
   .field .hint{ font-size:.72rem; color: var(--ink-soft); margin-top:5px; }
+  .field-row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .section-title{
+    font-family:'Fraunces',serif; font-size:.96rem; color: var(--navy); font-weight:600;
+    margin: 18px 0 4px;
+  }
+  .section-sub{ font-size:.76rem; color: var(--ink-soft); margin-bottom:12px; }
+  .prep-line{
+    background: var(--ocean-soft); border-radius: var(--radius-sm); padding:10px 12px;
+    font-family:'IBM Plex Mono', ui-monospace, monospace; font-size:.72rem; color: var(--navy);
+    word-break: break-all; margin-bottom:10px; display:none; white-space:pre-wrap;
+  }
+  .prep-line.show{ display:block; }
+  .prep-note{ font-size:.74rem; color: var(--ink-soft); margin-bottom:10px; }
   .btn{
     appearance:none; border:none; cursor:pointer; border-radius: var(--radius-sm);
     font-weight:700; font-size:.9rem; padding:12px 16px; width:100%; margin-bottom:9px;
@@ -264,6 +281,56 @@
       </div>
 
       <button type="button" class="btn btn-danger" id="owner-clear-cache" style="margin-top:8px;">Vider le cache local</button>
+
+      <div class="section-title">Préparation produit</div>
+      <div class="section-sub">Remplissez la fiche ci-dessous, puis copiez la ligne générée dans le tableau des produits.</div>
+
+      <div class="field">
+        <label for="prep-id">Identifiant</label>
+        <input id="prep-id" type="text" autocomplete="off" placeholder="PR007">
+      </div>
+      <div class="field">
+        <label for="prep-name">Nom</label>
+        <input id="prep-name" type="text" autocomplete="off" placeholder="Nom du produit">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="prep-price">Prix</label>
+          <input id="prep-price" type="text" inputmode="decimal" autocomplete="off" placeholder="0">
+        </div>
+        <div class="field">
+          <label for="prep-unit">Unité</label>
+          <input id="prep-unit" type="text" autocomplete="off" placeholder="kg, pièce, colis…">
+        </div>
+      </div>
+      <div class="field">
+        <label for="prep-image">Image</label>
+        <input id="prep-image" type="text" autocomplete="off" placeholder="7.jpg ou -">
+        <div class="hint">Nom du fichier placé dans le dossier des images (ex. 7.jpg), ou « - » si aucune image.</div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="prep-active">Actif</label>
+          <select id="prep-active"><option value="TRUE" selected>Oui — visible sur le portail</option><option value="FALSE">Non — masqué</option></select>
+        </div>
+        <div class="field">
+          <label for="prep-available">Disponible</label>
+          <select id="prep-available"><option value="TRUE" selected>Oui</option><option value="FALSE">Non — épuisé</option></select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="prep-desc">Description</label>
+        <input id="prep-desc" type="text" autocomplete="off" placeholder="Texte court">
+      </div>
+      <div class="field">
+        <label for="prep-sort">Ordre d'affichage</label>
+        <input id="prep-sort" type="text" inputmode="numeric" autocomplete="off" placeholder="7">
+      </div>
+
+      <button type="button" class="btn btn-gold" id="prep-generate">Copier la ligne pour le Sheet</button>
+      <div id="prep-line" class="prep-line"></div>
+      <div id="prep-note" class="prep-note hidden">Copiez cette ligne dans le tableau pour la publier.</div>
+
       <div class="sheet-close"><button type="button" id="owner-close">Fermer</button></div>
     </div>
   </div>
@@ -277,10 +344,9 @@
   // ------------------------------------------------------------------
   // Réglages développeur
   // ------------------------------------------------------------------
-  var HIDE_UNAVAILABLE = false; // passer à true pour masquer les produits indisponibles
   var OWNER_CODE = "4321";
   var REFRESH_INTERVAL_MS = 3 * 60 * 1000; // 3 minutes
-  var DEFAULT_API_URL = "https://script.google.com/macros/s/AKfycbyLsY3-J7D1JBKRTWYW29ldO-CMNnMKWf6NEagr5vXfmT3xcAtg2U2O0Jr0UJW9Ynpb/exec";
+  var DEFAULT_API_URL = "https://script.google.com/macros/s/AKfycbzUe0Qezr6dmpkphnx_ARzbOdVvli3q2FycS1IcDgIW7ZXQ0iElQ6gBs8QPF2qWrsZT/exec";
 
   var LS_API_URL   = "pde_client_api_url_v1";
   var LS_CONFIG    = "pde_client_config_cache_v1";
@@ -301,12 +367,12 @@
       updatedAt: ""
     },
     products: [
-      { productId:"PR001", name:"Petit capitaine", price:0, unit:"pièce", image:"assets/PR(PETIT CAPITAINE).jpg", available:true, description:"Poisson salé de qualité, idéal pour la cuisine familiale.", sortOrder:1 },
-      { productId:"PR002", name:"Tilapia Makoke", price:0, unit:"pièce", image:"assets/PR(TILAPIA(Makoke)).jpg", available:true, description:"Tilapia préparé, sélectionné pour sa bonne conservation.", sortOrder:2 },
-      { productId:"PR003", name:"Makayabo qualité A", price:0, unit:"kg", image:"assets/PR(00).jpg", available:true, description:"Makayabo salé, bon goût et bonne texture.", sortOrder:3 },
-      { productId:"PR004", name:"Makayabo sélection", price:0, unit:"kg", image:"assets/PR(11).jpg", available:true, description:"Sélection de poissons salés pour commandes régulières.", sortOrder:4 },
-      { productId:"PR005", name:"Poisson salé", price:0, unit:"kg", image:"assets/PR(22).jpg", available:true, description:"Produit disponible selon arrivage.", sortOrder:5 },
-      { productId:"PR006", name:"Munama", price:0, unit:"kg", image:"assets/PR(MUNAMA).jpg", available:true, description:"Munama de qualité, bien séché.", sortOrder:6 }
+      { productId:"PR001", name:"Petit capitaine", price:0, unit:"pièce", image:"assets/PR(PETIT CAPITAINE).jpg", active:true, available:true, description:"Poisson salé de qualité, idéal pour la cuisine familiale.", sortOrder:1 },
+      { productId:"PR002", name:"Tilapia Makoke", price:0, unit:"pièce", image:"assets/PR(TILAPIA(Makoke)).jpg", active:true, available:true, description:"Tilapia préparé, sélectionné pour sa bonne conservation.", sortOrder:2 },
+      { productId:"PR003", name:"Makayabo qualité A", price:0, unit:"kg", image:"assets/PR(00).jpg", active:true, available:true, description:"Makayabo salé, bon goût et bonne texture.", sortOrder:3 },
+      { productId:"PR004", name:"Makayabo sélection", price:0, unit:"kg", image:"assets/PR(11).jpg", active:true, available:true, description:"Sélection de poissons salés pour commandes régulières.", sortOrder:4 },
+      { productId:"PR005", name:"Poisson salé", price:0, unit:"kg", image:"assets/PR(22).jpg", active:true, available:true, description:"Produit disponible selon arrivage.", sortOrder:5 },
+      { productId:"PR006", name:"Munama", price:0, unit:"kg", image:"assets/PR(MUNAMA).jpg", active:true, available:true, description:"Munama de qualité, bien séché.", sortOrder:6 }
     ]
   };
 
@@ -315,12 +381,31 @@
   // ------------------------------------------------------------------
   function $(sel){ return document.querySelector(sel); }
   function $all(sel){ return Array.prototype.slice.call(document.querySelectorAll(sel)); }
-  function apiUrl(){ return localStorage.getItem(LS_API_URL) || DEFAULT_API_URL; }
+  function apiUrl(){
+    var saved = localStorage.getItem(LS_API_URL) || '';
+    var oldDeployments = [
+      'https://script.google.com/macros/s/AKfycbyLsY3-J7D1JBKRTWYW29ldO-CMNnMKWf6NEagr5vXfmT3xcAtg2U2O0Jr0UJW9Ynpb/exec'
+    ];
+    if (!saved || oldDeployments.indexOf(saved) !== -1) {
+      localStorage.removeItem(LS_API_URL);
+      return DEFAULT_API_URL;
+    }
+    return saved;
+  }
 
   function imagePath(src){
     src = String(src || '').trim();
-    if (!src) return '';
-    return src.replace(/^\.\/dist\/assets\//, 'assets/').replace(/^dist\/assets\//, 'assets/');
+    if (!src || src === '-') return '';
+    // URL complète : on garde telle quelle.
+    if (/^https?:\/\//i.test(src)) return src;
+    // Chemin déjà correct (ou ancien nommage assets/PR(...).jpg) : on garde.
+    if (/^assets\//i.test(src)) return src;
+    // Ancien préfixe "dist/assets/..." ou "./dist/assets/..." : on corrige.
+    if (/^\.?\/?dist\/assets\//i.test(src)) {
+      return src.replace(/^\.?\/?dist\/assets\//i, 'assets/');
+    }
+    // Simple nom de fichier ("1.jpg", "12.png", ...) : on cherche dans assets/.
+    return 'assets/' + src.replace(/^\/+/, '');
   }
 
   function fmtPrice(price, currency){
@@ -452,8 +537,14 @@
 
   function renderGrid(products, whatsapp, currency){
     var grid = $('#grid');
-    var list = products.slice().sort(function(a,b){ return (a.sortOrder||0) - (b.sortOrder||0); });
-    if (HIDE_UNAVAILABLE) list = list.filter(function(p){ return p.available; });
+    var list = products
+      .filter(function(p){ return p.active !== false; })
+      .slice()
+      .sort(function(a,b){
+        var so = (a.sortOrder||0) - (b.sortOrder||0);
+        if (so !== 0) return so;
+        return String(a.name||'').localeCompare(String(b.name||''), 'fr');
+      });
 
     if (!list.length) {
       grid.innerHTML = '<div class="empty">Aucun produit à afficher pour le moment.</div>';
@@ -466,19 +557,23 @@
       var priceHtml = p.price
         ? '<span class="price">' + escapeHtml_(fmtPrice(p.price, currency)) + '</span>'
         : '<span class="price on-request">Prix sur demande</span>';
+      var resolvedImg = unavailable ? '' : imagePath(p.image);
+      var imgHtml = resolvedImg
+        ? '<div class="img-wrap"><img src="' + escapeHtml_(resolvedImg) + '" alt="' + escapeHtml_(p.name) + '" loading="lazy" onerror="this.closest(\'.img-wrap\').classList.add(\'hidden\')"></div>'
+        : '';
+      var orderBtn = unavailable
+        ? '<span class="wa-btn is-disabled" aria-disabled="true">' + waIcon() + 'Indisponible' + '</span>'
+        : '<a class="wa-btn" target="_blank" rel="noopener" href="' + waLink(whatsapp, message) + '">' + waIcon() + 'Commander' + '</a>';
       return (
         '<div class="card' + (unavailable ? ' is-unavailable' : '') + '">' +
-          '<div class="img-wrap">' +
-            '<img src="' + escapeHtml_(imagePath(p.image)) + '" alt="' + escapeHtml_(p.name) + '" loading="lazy">' +
-            (unavailable ? '<div class="unavailable-veil"><span>Indisponible</span></div>' : '') +
-          '</div>' +
+          imgHtml +
           '<div class="body">' +
-            '<div class="name">' + escapeHtml_(p.name) + '</div>' +
+            '<div class="name">' + escapeHtml_(p.name) +
+              (unavailable ? '<span class="sold-out-badge">Épuisé pour le moment</span>' : '') +
+            '</div>' +
             (p.description ? '<div class="desc">' + escapeHtml_(p.description) + '</div>' : '') +
             '<div class="price-row">' + priceHtml + '<span class="unit">' + escapeHtml_(p.unit || '') + '</span></div>' +
-            '<a class="wa-btn" target="_blank" rel="noopener" href="' + waLink(whatsapp, message) + '">' +
-              waIcon() + (unavailable ? 'Indisponible' : 'Commander') +
-            '</a>' +
+            orderBtn +
           '</div>' +
         '</div>'
       );
@@ -574,6 +669,39 @@
     render();
   });
 
+  $('#prep-generate').addEventListener('click', function(){
+    var cols = [
+      $('#prep-id').value.trim(),
+      $('#prep-name').value.trim(),
+      $('#prep-price').value.trim().replace(',', '.') || '0',
+      $('#prep-unit').value.trim(),
+      $('#prep-image').value.trim() || '-',
+      $('#prep-active').value,
+      $('#prep-available').value,
+      $('#prep-desc').value.trim(),
+      $('#prep-sort').value.trim() || '0'
+    ];
+    if (!cols[0] || !cols[1]) {
+      toast('Renseignez au moins l\'identifiant et le nom', true);
+      return;
+    }
+    var line = cols.join('\t');
+    var lineEl = $('#prep-line');
+    lineEl.textContent = line;
+    lineEl.classList.add('show');
+    $('#prep-note').classList.remove('hidden');
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(line).then(function(){
+        toast('Ligne copiée — collez-la dans le tableau');
+      }).catch(function(){
+        toast('Ligne prête — sélectionnez-la puis copiez-la');
+      });
+    } else {
+      toast('Ligne prête — sélectionnez-la puis copiez-la');
+    }
+  });
+
   $('#owner-clear-cache').addEventListener('click', function(){
     if (!confirm('Vider le catalogue en cache sur cet appareil ?')) return;
     localStorage.removeItem(LS_CONFIG);
@@ -600,5 +728,6 @@
 </script>
 </body>
 </html>
+
 
 
