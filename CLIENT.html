@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Poissonnerie de l'Est</title>
+<meta name="theme-color" content="#0B2A4A">
+<meta name="description" content="Poissonnerie de l'Est — catalogue et commandes via WhatsApp.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy: #0B2A4A;
+    --navy-deep: #071C31;
+    --ocean: #1E5E82;
+    --ocean-soft: #E4EEF2;
+    --gold: #C9A227;
+    --gold-light: #E4C766;
+    --cream: #F5EFE0;
+    --sunset: #D86A3F;
+    --foam: #CFE6E2;
+    --ink: #16232E;
+    --ink-soft: #5C6B74;
+    --line: #E3DCC8;
+    --danger: #B3452F;
+    --radius-lg: 22px;
+    --radius-md: 16px;
+    --radius-sm: 10px;
+    --shadow: 0 10px 26px rgba(11,42,74,0.10);
+    --shadow-lg: 0 22px 46px rgba(7,28,49,0.22);
+    --nav-h: 58px;
+    --ease: cubic-bezier(.22,.9,.32,1);
+  }
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0; background: var(--cream); color: var(--ink);
+    font-family:'Inter', system-ui, sans-serif; -webkit-font-smoothing:antialiased;
+    padding-bottom: env(safe-area-inset-bottom,0px);
+  }
+  h1,h2,h3{ font-family:'Fraunces', serif; margin:0; }
+  img{ max-width:100%; display:block; }
+  button{ font-family:inherit; }
+  .hidden{ display:none !important; }
+  a{ color:inherit; }
+  section{ scroll-margin-top: calc(var(--nav-h) + 10px); }
+
+  /* ---------- Reveal-on-scroll ---------- */
+  .reveal{
+    opacity:0; transform: translateY(18px);
+    transition: opacity .6s var(--ease), transform .6s var(--ease);
+    will-change: opacity, transform;
+  }
+  .reveal.in-view{ opacity:1; transform:none; }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *, *::before, *::after{
+      animation-duration:.001ms !important; animation-iteration-count:1 !important;
+      transition-duration:.001ms !important;
+    }
+    .reveal{ opacity:1 !important; transform:none !important; }
+  }
+
+  /* ---------- Navbar ---------- */
+  .navbar{
+    position:fixed; top:0; left:0; right:0; z-index:35; height: calc(var(--nav-h) + env(safe-area-inset-top,0px));
+    padding-top: env(safe-area-inset-top,0px);
+    background: rgba(7,28,49,0); border-bottom:1px solid rgba(255,255,255,0);
+    transition: background .35s var(--ease), border-color .35s var(--ease), box-shadow .35s var(--ease);
+  }
+  .navbar.scrolled{
+    background: rgba(7,28,49,.86); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border-bottom-color: rgba(255,255,255,.08); box-shadow: 0 8px 24px rgba(7,28,49,.18);
+  }
+  .navbar-inner{
+    height:100%; max-width:1040px; margin:0 auto; padding:0 16px;
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+  }
+  .navbar-brand{ display:flex; align-items:center; gap:9px; text-decoration:none; min-width:0; }
+  .navbar-logo{ width:26px; height:26px; border-radius:7px; object-fit:cover; flex-shrink:0; }
+  .navbar-brand span{
+    color:var(--cream); font-family:'Fraunces',serif; font-weight:600; font-size:.94rem;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .navbar-links{ display:flex; align-items:center; gap:4px; }
+  .navbar-links a{
+    text-decoration:none; color: rgba(245,239,224,.82); font-size:.82rem; font-weight:600;
+    padding:8px 10px; border-radius:999px; transition: color .2s ease, background .2s ease;
+  }
+  .navbar-links a:hover{ color:#fff; background: rgba(255,255,255,.08); }
+  .navbar-links .navbar-cta{
+    background: var(--gold); color: var(--navy-deep) !important; padding:9px 16px; margin-left:2px;
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  .navbar-links .navbar-cta:hover{ background: var(--gold-light); }
+  .navbar-links a:not(.navbar-cta) span.nav-label-full{ display:inline; }
+  @media (max-width:420px){
+    .navbar-links a:not(.navbar-cta){ padding:8px 7px; font-size:.78rem; }
+  }
+
+  /* ---------- Header / hero ---------- */
+  .hero{
+    position:relative; overflow:hidden;
+    background: radial-gradient(130% 100% at 50% -20%, var(--ocean) 0%, var(--navy) 55%, var(--navy-deep) 100%);
+    color: var(--cream);
+    padding: calc(34px + var(--nav-h) + env(safe-area-inset-top,0px)) 20px 58px;
+    text-align:center;
+  }
+  .hero::before{
+    content:''; position:absolute; inset:0; pointer-events:none; opacity:.5;
+    background:
+      radial-gradient(420px 220px at 14% 18%, rgba(201,162,39,.16), transparent 60%),
+      radial-gradient(360px 200px at 86% 6%, rgba(255,255,255,.08), transparent 60%);
+  }
+  .hero-inner{ position:relative; max-width:520px; margin:0 auto; }
+  .hero-inner .logo{
+    width:72px; height:72px; border-radius:18px; object-fit:cover; margin:0 auto 16px;
+    box-shadow: 0 10px 26px rgba(0,0,0,.28); opacity:0; animation: heroPop .7s var(--ease) .05s forwards;
+  }
+  .hero h1{
+    font-size:1.9rem; font-weight:700; line-height:1.18;
+    opacity:0; animation: heroUp .7s var(--ease) .16s forwards;
+  }
+  .hero p.subtitle{
+    margin:9px auto 0; max-width:420px; font-size:.95rem; color: rgba(245,239,224,.86);
+    opacity:0; animation: heroUp .7s var(--ease) .27s forwards;
+  }
+  .hero p.hero-desc{
+    margin:14px auto 0; max-width:400px; font-size:.85rem; line-height:1.55; color: rgba(245,239,224,.72);
+    opacity:0; animation: heroUp .7s var(--ease) .36s forwards;
+  }
+  .hero-cta{
+    margin-top:24px; display:inline-flex; align-items:center; gap:9px;
+    background: var(--gold); color: var(--navy-deep); text-decoration:none; font-weight:700; font-size:.94rem;
+    padding:14px 24px; border-radius:999px; box-shadow: 0 14px 30px rgba(0,0,0,.25);
+    opacity:0; animation: heroUp .7s var(--ease) .46s forwards;
+    transition: transform .25s var(--ease), box-shadow .25s var(--ease), background .2s ease;
+  }
+  .hero-cta:hover{ background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 18px 34px rgba(0,0,0,.3); }
+  .hero-cta:active{ transform: translateY(0) scale(.98); }
+  .hero-cta svg{ width:16px; height:16px; animation: chevBounce 1.8s ease-in-out 1.4s 3; }
+
+  @keyframes heroPop{ from{ opacity:0; transform: scale(.82) translateY(6px);} to{ opacity:1; transform:none; } }
+  @keyframes heroUp{ from{ opacity:0; transform: translateY(14px);} to{ opacity:1; transform:none; } }
+  @keyframes chevBounce{ 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(4px);} }
+
+  .hero-wave{ display:block; width:100%; height:34px; margin-top:-1px; }
+  .hero-wave path{ fill: var(--cream); }
+
+  /* ---------- Announcement ---------- */
+  .announcement{
+    max-width:640px; margin: -20px auto 0; padding: 0 16px; position:relative; z-index:2;
+  }
+  .announcement .box{
+    background:#fff; border-left:4px solid var(--gold);
+    border-radius: var(--radius-sm); padding:13px 16px;
+    box-shadow: var(--shadow); font-size:.86rem; color: var(--ink);
+    display:flex; gap:10px; align-items:flex-start;
+  }
+  .announcement .box .dot{ width:7px; height:7px; border-radius:50%; background: var(--sunset); margin-top:6px; flex-shrink:0; }
+
+  /* ---------- Status strip ---------- */
+  .status-strip{
+    max-width:640px; margin:10px auto 0; padding:0 16px;
+    font-size:.74rem; color: var(--ink-soft); display:flex; align-items:center; justify-content:center; gap:6px;
+  }
+  .status-strip .dot{ width:6px; height:6px; border-radius:50%; background: var(--ocean); }
+  .status-strip.offline .dot{ background: var(--sunset); }
+  .status-strip.hidden{ display:none; }
+
+  /* ---------- Trust section ---------- */
+  .trust{ max-width:960px; margin:0 auto; padding: 30px 16px 6px; }
+  .trust h2{ font-size:1.1rem; color: var(--navy); text-align:center; margin-bottom:18px; }
+  .trust-grid{
+    display:grid; grid-template-columns: repeat(2,1fr); gap:12px;
+  }
+  @media (min-width:640px){ .trust-grid{ grid-template-columns: repeat(4,1fr); } }
+  .trust-item{
+    background:#fff; border-radius: var(--radius-md); padding:16px 14px; text-align:center;
+    box-shadow: var(--shadow); transition: transform .3s var(--ease), box-shadow .3s var(--ease);
+  }
+  .trust-item:hover{ transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+  .trust-item .ico{
+    width:42px; height:42px; margin:0 auto 10px; border-radius:12px; background: var(--foam);
+    display:flex; align-items:center; justify-content:center; font-size:1.2rem;
+  }
+  .trust-item h3{ font-size:.86rem; color: var(--navy); font-weight:600; margin-bottom:5px; }
+  .trust-item p{ font-size:.74rem; color: var(--ink-soft); line-height:1.45; margin:0; }
+
+  /* ---------- Products ---------- */
+  .catalog{ max-width:960px; margin:0 auto; padding: 34px 16px 20px; }
+  .catalog-head{ margin-bottom:16px; }
+  .catalog-head h2{ font-size:1.25rem; color: var(--navy); }
+  .catalog-head p{ font-size:.82rem; color: var(--ink-soft); margin-top:4px; }
+  .grid{
+    display:grid; grid-template-columns: 1fr; gap:18px;
+  }
+  @media (min-width: 620px){ .grid{ grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 960px){ .grid{ grid-template-columns: 1fr 1fr 1fr; } }
+
+  .card{
+    background:#fff; border-radius: var(--radius-lg); overflow:hidden;
+    box-shadow: var(--shadow); display:flex; flex-direction:column;
+    transition: transform .35s var(--ease), box-shadow .35s var(--ease);
+  }
+  .card:hover{ transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+  .card:active{ transform: translateY(-1px) scale(.995); }
+
+  .card .card-media{ position:relative; }
+  .card .img-wrap{
+    aspect-ratio: 4 / 3; background: var(--ocean-soft); position:relative; overflow:hidden;
+  }
+  .card .img-wrap img{
+    width:100%; height:100%; object-fit:cover; transition: transform .6s var(--ease), filter .3s ease, opacity .3s ease;
+  }
+  .card:hover .img-wrap img{ transform: scale(1.06); }
+  .card .img-wrap.is-unavailable img{ filter: grayscale(.4) saturate(.75); opacity:.82; }
+  .card .img-wrap.hidden{ display:none; }
+  .card .img-placeholder{
+    aspect-ratio: 4/3; background: linear-gradient(150deg, var(--ocean-soft), var(--foam));
+    display:flex; align-items:center; justify-content:center; font-size:2.2rem;
+  }
+  .card .card-media::after{
+    content:''; position:absolute; left:0; right:0; bottom:0; height:46%; pointer-events:none;
+    background: linear-gradient(to top, rgba(7,28,49,.42), rgba(7,28,49,0));
+  }
+  .card .sold-out-badge{
+    position:absolute; top:10px; left:10px; z-index:2;
+    background: rgba(216,106,63,.94); color:#fff; font-size:.66rem; font-weight:700;
+    padding:5px 11px; border-radius:999px; letter-spacing:.02em; font-family:'Inter',sans-serif;
+    white-space:nowrap; box-shadow: 0 4px 10px rgba(0,0,0,.18);
+  }
+  .card .price-tag{
+    position:absolute; left:12px; bottom:12px; z-index:2;
+    background: rgba(255,255,255,.95); backdrop-filter: blur(4px);
+    border-radius:999px; padding:6px 13px; box-shadow: var(--shadow);
+  }
+  .card .price{ font-family:'Fraunces',serif; font-weight:700; font-size:1.02rem; color: var(--navy); }
+  .card .price.on-request{ font-size:.78rem; font-weight:600; color: var(--ink-soft); }
+
+  .card .body{ padding:15px 16px 16px; display:flex; flex-direction:column; gap:7px; flex:1; }
+  .card .name{ font-family:'Fraunces',serif; font-weight:600; font-size:1.05rem; color: var(--ink); line-height:1.28; }
+  .card .desc{ font-size:.82rem; color: var(--ink-soft); line-height:1.45; }
+  .card .meta-row{ display:flex; align-items:center; justify-content:space-between; margin-top:auto; padding-top:2px; }
+  .card .unit{ font-size:.74rem; color: var(--ink-soft); }
+
+  .card .wa-btn{
+    margin-top:6px; display:flex; align-items:center; justify-content:center; gap:8px;
+    background: var(--gold); color: var(--navy-deep); border:none; border-radius: var(--radius-sm);
+    padding:12px 14px; font-weight:700; font-size:.88rem; cursor:pointer; text-decoration:none;
+    transition: background .2s ease, transform .18s var(--ease), box-shadow .2s ease;
+  }
+  .card .wa-btn:hover{ background: var(--gold-light); box-shadow: 0 8px 18px rgba(201,162,39,.28); }
+  .card .wa-btn:active{ transform: scale(.97); }
+  .card .wa-btn svg{ width:16px; height:16px; flex-shrink:0; }
+  .card .wa-btn.is-disabled{ background: var(--ocean-soft); color: var(--ink-soft); pointer-events:none; }
+  .card .wa-btn.is-loading{ opacity:.86; }
+
+  .empty{ text-align:center; padding:50px 20px; color: var(--ink-soft); }
+
+  /* ---------- Footer ---------- */
+  footer{
+    text-align:center; padding: 26px 16px calc(30px + env(safe-area-inset-bottom,0px));
+    color: var(--ink-soft); font-size:.76rem;
+  }
+
+  /* ---------- Discreet settings button ---------- */
+  .gear-btn{
+    position:fixed; right:16px; bottom: calc(16px + env(safe-area-inset-bottom,0px));
+    width:42px; height:42px; border-radius:50%; border:none; cursor:pointer;
+    background: rgba(11,42,74,.55); color: var(--cream); display:flex; align-items:center; justify-content:center;
+    box-shadow: var(--shadow); z-index:30; opacity:.55; transition: opacity .15s ease, transform .2s ease;
+  }
+  .gear-btn:hover, .gear-btn:focus{ opacity:1; }
+  .gear-btn:active{ transform: scale(.92); }
+  .gear-btn svg{ width:19px; height:19px; }
+
+  /* ---------- Modals ---------- */
+  .overlay{
+    position:fixed; inset:0; background: rgba(7,28,49,.55); z-index:40;
+    display:flex; align-items:flex-end; justify-content:center; padding:0;
+    animation: overlayIn .2s ease;
+  }
+  @keyframes overlayIn{ from{ opacity:0; } to{ opacity:1; } }
+  @media (min-width:560px){ .overlay{ align-items:center; } }
+  .sheet{
+    background: var(--cream); width:100%; max-width:420px;
+    border-radius: 22px 22px 0 0; padding:22px 22px calc(22px + env(safe-area-inset-bottom,0px));
+    max-height:88vh; overflow-y:auto; box-shadow: var(--shadow);
+    animation: sheetUp .28s var(--ease);
+  }
+  @keyframes sheetUp{ from{ opacity:0; transform: translateY(24px); } to{ opacity:1; transform:none; } }
+  @media (min-width:560px){ .sheet{ border-radius: var(--radius-lg); } }
+  .sheet h3{ font-size:1.1rem; color: var(--navy); margin-bottom:4px; }
+  .sheet .sub{ font-size:.8rem; color: var(--ink-soft); margin-bottom:16px; }
+  .field{ margin-bottom:13px; text-align:left; }
+  .field label{ display:block; font-size:.76rem; font-weight:600; color: var(--navy); margin-bottom:6px; }
+  .field input{
+    width:100%; padding:12px 13px; border-radius: var(--radius-sm); border:1.5px solid var(--line);
+    background:#fff; font-size:1rem; color: var(--ink); outline:none;
+  }
+  .field input, .field select, .field textarea{
+    width:100%; padding:12px 13px; border-radius: var(--radius-sm); border:1.5px solid var(--line);
+    background:#fff; font-size:1rem; color: var(--ink); outline:none; font-family:inherit;
+    transition: border-color .2s ease;
+  }
+  .field select{ appearance:none; }
+  .field input:focus, .field select:focus, .field textarea:focus{ border-color: var(--ocean); }
+  .field .hint{ font-size:.72rem; color: var(--ink-soft); margin-top:5px; }
+  .field-row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .section-title{
+    font-family:'Fraunces',serif; font-size:.96rem; color: var(--navy); font-weight:600;
+    margin: 18px 0 4px;
+  }
+  .section-sub{ font-size:.76rem; color: var(--ink-soft); margin-bottom:12px; }
+  .prep-line{
+    background: var(--ocean-soft); border-radius: var(--radius-sm); padding:10px 12px;
+    font-family:'IBM Plex Mono', ui-monospace, monospace; font-size:.72rem; color: var(--navy);
+    word-break: break-all; margin-bottom:10px; display:none; white-space:pre-wrap;
+  }
+  .prep-line.show{ display:block; }
+  .prep-note{ font-size:.74rem; color: var(--ink-soft); margin-bottom:10px; }
+  .btn{
+    appearance:none; border:none; cursor:pointer; border-radius: var(--radius-sm);
+    font-weight:700; font-size:.9rem; padding:12px 16px; width:100%; margin-bottom:9px;
+    transition: transform .15s var(--ease), opacity .15s ease;
+  }
+  .btn:active{ transform: scale(.98); }
+  .btn-primary{ background: var(--navy); color: var(--cream); }
+  .btn-gold{ background: var(--gold); color: var(--navy-deep); }
+  .btn-outline{ background: transparent; color: var(--navy); border:1.5px solid var(--navy); }
+  .btn-ghost{ background: transparent; color: var(--ocean); }
+  .btn-danger{ background: transparent; color: var(--danger); border:1.5px solid var(--danger); }
+  .sheet-close{ text-align:center; margin-top:2px; }
+  .sheet-close button{ background:none; border:none; color: var(--ink-soft); font-size:.84rem; cursor:pointer; padding:8px; }
+
+  .owner-kv{ display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--line); font-size:.85rem; }
+  .owner-kv:last-child{ border-bottom:none; }
+  .owner-kv .k{ color: var(--ink-soft); }
+  .owner-kv .v{ font-weight:600; text-align:right; }
+  .local-badge{
+    display:inline-block; background:#FBEAE3; color: var(--danger); font-size:.7rem; font-weight:700;
+    padding:3px 9px; border-radius:999px; margin-bottom:10px;
+  }
+
+  .toast{
+    position:fixed; left:50%; bottom:78px; transform: translateX(-50%) translateY(10px);
+    background: var(--navy); color:#fff; padding:11px 18px; border-radius:999px;
+    font-size:.84rem; box-shadow: var(--shadow); opacity:0; pointer-events:none;
+    transition: opacity .2s ease, transform .2s ease; z-index:60; white-space:nowrap;
+  }
+  .toast.show{ opacity:1; transform: translateX(-50%) translateY(0); }
+  .toast.err{ background: var(--danger); }
+</style>
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <a href="#top" class="navbar-brand">
+        <img class="navbar-logo" src="logo.png" alt="">
+        <span id="brand-name-mini">Poissonnerie de l'Est</span>
+      </a>
+      <div class="navbar-links">
+        <a href="#top"><span class="nav-label-full">Accueil</span></a>
+        <a href="#catalog"><span class="nav-label-full">Produits</span></a>
+        <a href="#" id="nav-order" class="wa-btn navbar-cta" target="_blank" rel="noopener"><span class="wa-label">Commander</span></a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero" id="top">
+    <div class="hero-inner">
+      <img class="logo" src="logo.png" alt="Poissonnerie de l'Est">
+      <h1 id="brand-name">Poissonnerie de l'Est</h1>
+      <p class="subtitle" id="brand-subtitle">Makayabo yetu ya qualité, faites-nous confiance.</p>
+      <p class="hero-desc">Poisson salé (makayabo) de qualité, prêts pour votre cuisine. Parcourez notre sélection et commandez en quelques secondes, directement sur WhatsApp.</p>
+      <a href="#catalog" class="hero-cta">
+        <span>Découvrir nos produits</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </a>
+    </div>
+    <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0,32 C 240,64 480,0 720,18 C 960,36 1200,54 1440,24 L1440,60 L0,60 Z"></path></svg>
+  </header>
+
+  <div class="announcement hidden" id="announcement">
+    <div class="box"><span class="dot"></span><span id="announcement-text"></span></div>
+  </div>
+
+  <div class="status-strip hidden" id="status-strip">
+    <span class="dot"></span><span id="status-text">Hors ligne — dernier catalogue affiché</span>
+  </div>
+
+  <main class="catalog" id="catalog">
+    <div class="catalog-head reveal">
+      <h2>Notre catalogue</h2>
+      <p>Disponibilité selon arrivage — appuyez sur un produit pour commander via WhatsApp.</p>
+    </div>
+    <div id="grid" class="grid"></div>
+  </main>
+
+  <section class="trust" aria-labelledby="trust-title">
+    <h2 id="trust-title" class="reveal">Pourquoi commander chez nous ?</h2>
+    <div class="trust-grid">
+      <div class="trust-item reveal"><div class="ico">🐟</div><h3>Produits sélectionnés</h3><p>Poisson salé et makayabo choisis avec soin.</p></div>
+      <div class="trust-item reveal" style="transition-delay:70ms"><div class="ico">📦</div><h3>Disponibilité selon arrivage</h3><p>Le catalogue reflète nos arrivages réels.</p></div>
+      <div class="trust-item reveal" style="transition-delay:140ms"><div class="ico">💬</div><h3>Commande directe WhatsApp</h3><p>Un message clair, sans compte ni panier.</p></div>
+      <div class="trust-item reveal" style="transition-delay:210ms"><div class="ico">🤝</div><h3>Service client</h3><p>Nous confirmons prix et disponibilité avec vous.</p></div>
+    </div>
+  </section>
+
+  <footer>
+    <div id="footer-updated">—</div>
+    <div style="margin-top:4px;">Poissonnerie de l'Est</div>
+  </footer>
+
+  <button class="gear-btn" id="gear-btn" aria-label="Paramètres">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.34 1.87l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.7 1.7 0 00-1.87-.34 1.7 1.7 0 00-1 1.55V21a2 2 0 11-4 0v-.09a1.7 1.7 0 00-1-1.55 1.7 1.7 0 00-1.87.34l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.7 1.7 0 00.34-1.87 1.7 1.7 0 00-1.55-1H3a2 2 0 110-4h.09a1.7 1.7 0 001.55-1 1.7 1.7 0 00-.34-1.87l-.06-.06a2 2 0 112.83-2.83l.06.06a1.7 1.7 0 001.87.34H9a1.7 1.7 0 001-1.55V3a2 2 0 114 0v.09a1.7 1.7 0 001 1.55 1.7 1.7 0 001.87-.34l.06-.06a2 2 0 112.83 2.83l-.06.06a1.7 1.7 0 00-.34 1.87V9a1.7 1.7 0 001.55 1H21a2 2 0 110 4h-.09a1.7 1.7 0 00-1.55 1z"/></svg>
+  </button>
+
+  <!-- ---- Code gate ---- -->
+  <div class="overlay hidden" id="gate-overlay">
+    <div class="sheet">
+      <h3>Paramètres</h3>
+      <p class="sub">Réservé au propriétaire. Entrez le code d'accès.</p>
+      <div id="gate-error" class="field hint" style="color:var(--danger); display:none;"></div>
+      <form id="gate-form">
+        <div class="field">
+          <label for="gate-code">Code</label>
+          <input id="gate-code" type="password" inputmode="numeric" autocomplete="off">
+        </div>
+        <button type="submit" class="btn btn-primary">Valider</button>
+      </form>
+      <div class="sheet-close"><button type="button" id="gate-cancel">Annuler</button></div>
+    </div>
+  </div>
+
+  <!-- ---- Owner panel ---- -->
+  <div class="overlay hidden" id="owner-overlay">
+    <div class="sheet">
+      <h3>Paramètres propriétaire</h3>
+      <p class="sub">Ces réglages restent sur cet appareil.</p>
+
+      <div class="field">
+        <label for="owner-api-url">Lien de synchronisation</label>
+        <input id="owner-api-url" type="text" autocomplete="off" placeholder="Collez ici le lien de synchronisation">
+        <div class="hint">Utilisé pour récupérer le catalogue à jour. Laissez vide pour rester sur la version de démonstration intégrée.</div>
+      </div>
+      <button type="button" class="btn btn-outline" id="owner-save-url">Sauvegarder le lien</button>
+      <button type="button" class="btn btn-ghost" id="owner-test">Tester la connexion</button>
+      <button type="button" class="btn btn-gold" id="owner-refresh">Actualiser le catalogue</button>
+
+      <div class="owner-kv"><span class="k">Dernière mise à jour</span><span class="v" id="owner-updated">—</span></div>
+      <div class="owner-kv"><span class="k">Connexion</span><span class="v" id="owner-status">—</span></div>
+
+      <div style="margin-top:16px;">
+        <div id="owner-local-badge" class="local-badge hidden">Numéro local actif (aperçu sur cet appareil uniquement)</div>
+        <div class="field">
+          <label for="owner-whatsapp">Numéro WhatsApp (local, temporaire)</label>
+          <input id="owner-whatsapp" type="text" autocomplete="off" placeholder="+243...">
+          <div class="hint">Ne modifie pas le numéro public — seulement l'aperçu sur cet appareil.</div>
+        </div>
+        <button type="button" class="btn btn-outline" id="owner-save-whatsapp">Appliquer localement</button>
+        <button type="button" class="btn btn-ghost" id="owner-reset-whatsapp">Revenir au numéro public</button>
+      </div>
+
+      <button type="button" class="btn btn-danger" id="owner-clear-cache" style="margin-top:8px;">Vider le cache local</button>
+
+      <div class="section-title">Préparation produit</div>
+      <div class="section-sub">Remplissez la fiche ci-dessous, puis copiez la ligne générée dans le tableau des produits.</div>
+
+      <div class="field">
+        <label for="prep-id">Identifiant</label>
+        <input id="prep-id" type="text" autocomplete="off" placeholder="PR007">
+      </div>
+      <div class="field">
+        <label for="prep-name">Nom</label>
+        <input id="prep-name" type="text" autocomplete="off" placeholder="Nom du produit">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="prep-price">Prix</label>
+          <input id="prep-price" type="text" inputmode="decimal" autocomplete="off" placeholder="0">
+        </div>
+        <div class="field">
+          <label for="prep-unit">Unité</label>
+          <input id="prep-unit" type="text" autocomplete="off" placeholder="kg, pièce, colis…">
+        </div>
+      </div>
+      <div class="field">
+        <label for="prep-image">Image</label>
+        <input id="prep-image" type="text" autocomplete="off" placeholder="7.jpg ou -">
+        <div class="hint">Nom du fichier placé dans le dossier des images (ex. 7.jpg), ou « - » si aucune image.</div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="prep-active">Actif</label>
+          <select id="prep-active"><option value="TRUE" selected>Oui — visible sur le portail</option><option value="FALSE">Non — masqué</option></select>
+        </div>
+        <div class="field">
+          <label for="prep-available">Disponible</label>
+          <select id="prep-available"><option value="TRUE" selected>Oui</option><option value="FALSE">Non — épuisé</option></select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="prep-desc">Description</label>
+        <input id="prep-desc" type="text" autocomplete="off" placeholder="Texte court">
+      </div>
+      <div class="field">
+        <label for="prep-sort">Ordre d'affichage</label>
+        <input id="prep-sort" type="text" inputmode="numeric" autocomplete="off" placeholder="7">
+      </div>
+
+      <button type="button" class="btn btn-gold" id="prep-generate">Copier la ligne pour le Sheet</button>
+      <div id="prep-line" class="prep-line"></div>
+      <div id="prep-note" class="prep-note hidden">Copiez cette ligne dans le tableau pour la publier.</div>
+
+      <div class="sheet-close"><button type="button" id="owner-close">Fermer</button></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  // ------------------------------------------------------------------
+  // Réglages développeur
+  // ------------------------------------------------------------------
+  var OWNER_CODE = "4321";
+  var REFRESH_INTERVAL_MS = 3 * 60 * 1000; // 3 minutes
+  // Lien de synchronisation désactivé : le déploiement Apps Script fourni
+  // répond 404 (deployment introuvable / non publié en "Application Web"
+  // avec accès "Tout le monde"). En attendant un lien valide, le portail
+  // reste fiable en s'appuyant sur le catalogue intégré ci-dessous.
+  // Pour réactiver la synchronisation : renseignez un lien /exec valide
+  // ici, ou via le panneau propriétaire (icône ⚙, code 4321).
+  var DEFAULT_API_URL = "";
+
+  var LS_API_URL   = "pde_client_api_url_v1";
+  var LS_CONFIG    = "pde_client_config_cache_v1";
+  var LS_LOCAL_WA  = "pde_client_local_whatsapp_v1";
+
+  // Catalogue de démonstration intégré : garantit un affichage correct
+  // même avant que le lien de synchronisation soit configuré, ou si le
+  // réseau est indisponible et qu'aucune donnée n'a encore été mise en cache.
+  var FALLBACK_CONFIG = {
+    settings: {
+      brandName: "POISSONNERIE DE L'EST",
+      subtitle: "L'EXPERIENCE DE L'EST",
+      whatsappNumber: "243977849144",
+      announcementActive: true,
+      announcementText: "Bienvenue chez la Poissonnerie de l'Est. Commandez directement via WhatsApp.",
+      currency: "USD",
+      lastUpdatedLabel: "Dernière mise à jour",
+      updatedAt: ""
+    },
+    products: [
+      { productId:"PR001", name:"Petit capitaine", price:1, unit:"pièce", image:"assets/PETIT CAPITAIN.jpg", active:true, available:true, description:"Poisson salé de qualité, idéal pour la cuisine familiale.", sortOrder:1 },
+      { productId:"PR002", name:"Tilapia Makoke", price:9, unit:"pièce", image:"assets/TILAPIA(Makoke).jpg", active:true, available:true, description:"Tilapia préparé, sélectionné pour sa bonne conservation.", sortOrder:2 },
+      { productId:"PR003", name:"Makayabo qualité A", price:2, unit:"kg", image:"assets/MAKAYABO A.jpg", active:true, available:true, description:"Makayabo salé, bon goût et bonne texture.", sortOrder:3 },
+      { productId:"PR004", name:"Makayabo sélection", price:8, unit:"kg", image:"assets/MAKAYABO B.jpg", active:true, available:true, description:"Sélection de poissons salés pour commandes régulières.", sortOrder:4 },
+      { productId:"PR005", name:"Poisson salé", price:3, unit:"kg", image:"assets/MAKAYABO C.jpg", active:true, available:true, description:"Produit disponible selon arrivage.", sortOrder:5 },
+      { productId:"PR006", name:"Munama", price:7, unit:"kg", image:"assets/PR(MUNAMA).jpg", active:true, available:true, description:"Munama de qualité, bien séché.", sortOrder:6 },
+      { productId:"PR007", name:"Gros capitaine", price:0, unit:"kg", image:"assets/GROS CAPITAINE.jpg", active:true, available:true, description:"Gros capitaine salé, selon arrivage.", sortOrder:7 },
+      { productId:"PR008", name:"Ngasia", price:0, unit:"kg", image:"assets/NGASIA.jpg", active:true, available:true, description:"Ngasia soigneusement préparé.", sortOrder:8 },
+      { productId:"PR009", name:"Nzobo", price:0, unit:"kg", image:"assets/NZOBO.jpg", active:true, available:true, description:"Nzobo fumé et préparé avec soin.", sortOrder:9 },
+      { productId:"PR010", name:"Roso", price:0, unit:"kg", image:"assets/ROSO.jpg", active:true, available:true, description:"Roso de qualité, selon arrivage.", sortOrder:10 },
+    ]
+  };
+
+  // ------------------------------------------------------------------
+  // Utilitaires
+  // ------------------------------------------------------------------
+  function $(sel){ return document.querySelector(sel); }
+  function $all(sel){ return Array.prototype.slice.call(document.querySelectorAll(sel)); }
+  function apiUrl(){
+    var saved = localStorage.getItem(LS_API_URL) || '';
+    var oldDeployments = [
+      'https://script.google.com/macros/s/AKfycbyLsY3-J7D1JBKRTWYW29ldO-CMNnMKWf6NEagr5vXfmT3xcAtg2U2O0Jr0UJW9Ynpb/exec',
+      'https://script.google.com/macros/s/AKfycbzUe0Qezr6dmpkphnx_ARzbOdVvli3q2FycS1IcDgIW7ZXQ0iElQ6gBs8QPF2qWrsZT/exec'
+    ];
+    if (!saved || oldDeployments.indexOf(saved) !== -1) {
+      localStorage.removeItem(LS_API_URL);
+      return DEFAULT_API_URL;
+    }
+    return saved;
+  }
+
+  function imagePath(src){
+    src = String(src || '').trim();
+    if (!src || src === '-') return '';
+    // URL complète : on garde telle quelle.
+    if (/^https?:\/\//i.test(src)) return src;
+    // Chemin déjà correct (ou ancien nommage assets/PR(...).jpg) : on garde.
+    if (/^assets\//i.test(src)) return src;
+    // Ancien préfixe "dist/assets/..." ou "./dist/assets/..." : on corrige.
+    if (/^\.?\/?dist\/assets\//i.test(src)) {
+      return src.replace(/^\.?\/?dist\/assets\//i, 'assets/');
+    }
+    // Simple nom de fichier ("1.jpg", "12.png", ...) : on cherche dans assets/.
+    return 'assets/' + src.replace(/^\/+/, '');
+  }
+
+  function fmtPrice(price, currency){
+    var p = Number(price) || 0;
+    if (!p) return "Prix sur demande";
+    var symbol = currency === "USD" ? "$" : (currency || "");
+    return p.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " " + symbol;
+  }
+  function fmtDateTime(iso){
+    if (!iso) return "—";
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return "—";
+    return d.toLocaleDateString('fr-FR', { day:'2-digit', month:'short', year:'numeric' }) + ' à ' +
+           d.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
+  }
+  function toast(msg, isErr){
+    var t = $('#toast');
+    t.textContent = msg;
+    t.className = 'toast show' + (isErr ? ' err' : '');
+    clearTimeout(toast._h);
+    toast._h = setTimeout(function(){ t.className = 'toast'; }, 2600);
+  }
+  function waLink(number, message){
+    var digits = String(number || '').replace(/\D/g, '');
+    return 'https://wa.me/' + digits + '?text=' + encodeURIComponent(message);
+  }
+  function escapeHtml_(s){
+    return String(s === null || s === undefined ? '' : s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // Message WhatsApp adapté au produit : reprend le prix s'il est connu,
+  // demande le prix actuel sinon. Reste court et directement exploitable.
+  function orderMessage(p, currency){
+    var lines = [
+      "Bonjour Poissonnerie de l'Est 👋",
+      "",
+      "Je souhaite passer une commande pour :",
+      "🐟 " + p.name + (p.unit ? ' (' + p.unit + ')' : '')
+    ];
+    if (p.price) {
+      lines.push("💰 Prix indiqué : " + fmtPrice(p.price, currency));
+      lines.push("", "Merci de confirmer la disponibilité actuelle.");
+    } else {
+      lines.push("", "Le prix est « sur demande » — merci de me communiquer le prix actuel.");
+    }
+    lines.push("", "Je reste disponible pour préciser la quantité souhaitée. Merci.");
+    return lines.join("\n");
+  }
+  function generalOrderMessage(){
+    return [
+      "Bonjour Poissonnerie de l'Est 👋",
+      "",
+      "Je souhaite passer une commande.",
+      "Pourriez-vous m'indiquer les produits disponibles et leurs prix actuels ?",
+      "",
+      "Merci."
+    ].join("\n");
+  }
+
+  // ------------------------------------------------------------------
+  // Stockage local du catalogue
+  // ------------------------------------------------------------------
+  function getCachedConfig(){
+    try { return JSON.parse(localStorage.getItem(LS_CONFIG) || 'null'); } catch (e) { return null; }
+  }
+  function setCachedConfig(cfg){
+    localStorage.setItem(LS_CONFIG, JSON.stringify(cfg));
+  }
+
+  // ------------------------------------------------------------------
+  // État
+  // ------------------------------------------------------------------
+  var state = { config: null, source: 'fallback' }; // source: 'fallback' | 'cache' | 'live'
+
+  // ------------------------------------------------------------------
+  // Récupération de la configuration (synchronisation)
+  // ------------------------------------------------------------------
+  function fetchConfig(){
+    var url = apiUrl();
+    if (!url) return Promise.reject(new Error('no-url'));
+    var full = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'action=public.config';
+    return fetch(full, { method: 'GET' }).then(function(res){
+      if (!res.ok) throw new Error('network');
+      return res.json();
+    }).then(function(json){
+      if (!json || json.ok !== true) throw new Error((json && json.error) || 'invalid');
+      return { settings: json.settings, products: json.products };
+    });
+  }
+
+  function loadConfig(opts){
+    opts = opts || {};
+    var cached = getCachedConfig();
+    if (cached && !opts.forceFresh) {
+      state.config = cached; state.source = 'cache';
+      render();
+    } else if (!cached) {
+      state.config = FALLBACK_CONFIG; state.source = 'fallback';
+      render();
+    }
+    return fetchConfig().then(function(cfg){
+      state.config = cfg; state.source = 'live';
+      setCachedConfig(cfg);
+      setOffline(false);
+      render();
+      return cfg;
+    }).catch(function(err){
+      if (!state.config) { state.config = FALLBACK_CONFIG; state.source = 'fallback'; render(); }
+      setOffline(err.message !== 'no-url');
+      return null;
+    });
+  }
+
+  function setOffline(off){
+    var strip = $('#status-strip');
+    if (off) {
+      var when = state.config && state.config.settings && state.config.settings.updatedAt
+        ? fmtDateTime(state.config.settings.updatedAt) : null;
+      $('#status-text').textContent = when
+        ? ('Hors ligne — catalogue du ' + when)
+        : 'Hors ligne — catalogue de démonstration';
+      strip.classList.add('offline'); strip.classList.remove('hidden');
+    } else {
+      strip.classList.add('hidden'); strip.classList.remove('offline');
+    }
+  }
+
+  // ------------------------------------------------------------------
+  // Rendu
+  // ------------------------------------------------------------------
+  function localWhatsapp(){ return localStorage.getItem(LS_LOCAL_WA) || ''; }
+
+  function render(){
+    if (!state.config) return;
+    var settings = state.config.settings || {};
+    var products = state.config.products || [];
+    var whatsapp = localWhatsapp() || settings.whatsappNumber || '';
+
+    $('#brand-name').textContent = settings.brandName || "Poissonnerie de l'Est";
+    $('#brand-name-mini').textContent = settings.brandName || "Poissonnerie de l'Est";
+    $('#brand-subtitle').textContent = settings.subtitle || '';
+    document.title = settings.brandName || "Poissonnerie de l'Est";
+
+    var navOrder = $('#nav-order');
+    navOrder.href = whatsapp ? waLink(whatsapp, generalOrderMessage()) : '#catalog';
+
+    var ann = $('#announcement');
+    if (settings.announcementActive && settings.announcementText) {
+      $('#announcement-text').textContent = settings.announcementText;
+      ann.classList.remove('hidden');
+    } else {
+      ann.classList.add('hidden');
+    }
+
+    $('#footer-updated').textContent = (settings.lastUpdatedLabel || 'Dernière mise à jour') +
+      (settings.updatedAt ? (' : ' + fmtDateTime(settings.updatedAt)) : '');
+
+    renderGrid(products, whatsapp, settings.currency || 'USD');
+    renderOwnerStatus(settings);
+    observeReveals();
+  }
+
+  function renderGrid(products, whatsapp, currency){
+    var grid = $('#grid');
+    var list = products
+      .filter(function(p){ return p.active !== false; })
+      .slice()
+      .sort(function(a,b){
+        var so = (a.sortOrder||0) - (b.sortOrder||0);
+        if (so !== 0) return so;
+        return String(a.name||'').localeCompare(String(b.name||''), 'fr');
+      });
+
+    if (!list.length) {
+      grid.innerHTML = '<div class="empty">Aucun produit à afficher pour le moment.</div>';
+      return;
+    }
+
+    grid.innerHTML = list.map(function(p, i){
+      var unavailable = !p.available;
+      var message = orderMessage(p, currency);
+      var priceHtml = p.price
+        ? '<span class="price">' + escapeHtml_(fmtPrice(p.price, currency)) + '</span>'
+        : '<span class="price on-request">Prix sur demande</span>';
+      var resolvedImg = imagePath(p.image);
+      var mediaHtml = resolvedImg
+        ? '<div class="img-wrap' + (unavailable ? ' is-unavailable' : '') + '"><img src="' + escapeHtml_(resolvedImg) + '" alt="' + escapeHtml_(p.name) + '" loading="lazy" onerror="this.closest(\'.card-media\').querySelector(\'.img-wrap\').classList.add(\'hidden\')"></div>'
+        : '<div class="img-placeholder" aria-hidden="true">🐟</div>';
+      var badgeHtml = unavailable ? '<span class="sold-out-badge">Épuisé pour le moment</span>' : '';
+      var orderBtn = unavailable
+        ? '<span class="wa-btn is-disabled" aria-disabled="true">' + waIcon() + '<span class="wa-label">Indisponible</span></span>'
+        : '<a class="wa-btn" target="_blank" rel="noopener" href="' + waLink(whatsapp, message) + '">' + waIcon() + '<span class="wa-label">Commander</span></a>';
+      var delay = (i % 6) * 65;
+      return (
+        '<div class="card reveal' + (unavailable ? ' is-unavailable' : '') + '" style="transition-delay:' + delay + 'ms">' +
+          '<div class="card-media">' +
+            mediaHtml +
+            badgeHtml +
+            '<div class="price-tag">' + priceHtml + '</div>' +
+          '</div>' +
+          '<div class="body">' +
+            '<div class="name">' + escapeHtml_(p.name) + '</div>' +
+            (p.description ? '<div class="desc">' + escapeHtml_(p.description) + '</div>' : '') +
+            '<div class="meta-row"><span class="unit">' + escapeHtml_(p.unit || '') + '</span></div>' +
+            orderBtn +
+          '</div>' +
+        '</div>'
+      );
+    }).join('');
+  }
+
+  function waIcon(){
+    return '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.6-.8-1.9-.9-.2-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.1.2-.3.2-.5.1-1.5-.7-2.5-1.3-3.5-3-.3-.5.3-.4.7-1.4.1-.2 0-.4 0-.5-.1-.1-.6-1.4-.8-1.9-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9 1-.9 2.3 0 1.3 1 2.6 1.1 2.8.1.2 2 3 4.8 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.6-.7 1.9-1.3.2-.6.2-1.1.2-1.2-.1-.2-.3-.2-.5-.3z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.2-1.4c1.4.8 3 1.2 4.8 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3C4 14.9 3.6 13.5 3.6 12c0-4.6 3.8-8.4 8.4-8.4s8.4 3.8 8.4 8.4-3.8 8.2-8.4 8.2z"/></svg>';
+  }
+
+  function renderOwnerStatus(settings){
+    $('#owner-updated').textContent = settings.updatedAt ? fmtDateTime(settings.updatedAt) : '—';
+    $('#owner-status').textContent = state.source === 'live' ? 'En ligne' : (state.source === 'cache' ? 'Hors ligne (dernier catalogue)' : 'Démonstration (aucun lien configuré)');
+    var lw = localWhatsapp();
+    $('#owner-local-badge').classList.toggle('hidden', !lw);
+    $('#owner-whatsapp').value = lw;
+  }
+
+  // ------------------------------------------------------------------
+  // Animations au défilement (IntersectionObserver)
+  // ------------------------------------------------------------------
+  var reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var supportsIO = 'IntersectionObserver' in window;
+  var revealObserver = null;
+
+  function observeReveals(){
+    var targets = $all('.reveal:not(.observed)');
+    if (!targets.length) return;
+    if (reduceMotion || !supportsIO) {
+      targets.forEach(function(el){ el.classList.add('observed', 'in-view'); });
+      return;
+    }
+    if (!revealObserver) {
+      revealObserver = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+    }
+    targets.forEach(function(el){
+      el.classList.add('observed');
+      revealObserver.observe(el);
+    });
+  }
+
+  // Micro-interaction sur les boutons WhatsApp : petit état visuel avant
+  // l'ouverture de WhatsApp, sans jamais bloquer le lien existant (waLink()).
+  document.addEventListener('click', function(ev){
+    var link = ev.target && ev.target.closest ? ev.target.closest('.wa-btn:not(.is-disabled)') : null;
+    if (!link) return;
+    var label = link.querySelector('.wa-label');
+    if (!label) return;
+    var original = label.textContent;
+    label.textContent = 'Ouverture de WhatsApp…';
+    link.classList.add('is-loading');
+    setTimeout(function(){
+      label.textContent = original;
+      link.classList.remove('is-loading');
+    }, 1500);
+  });
+
+  // Barre de navigation : devient opaque avec flou après un léger défilement.
+  var navbarEl = $('#navbar');
+  var navTicking = false;
+  function updateNavbar(){
+    navTicking = false;
+    navbarEl.classList.toggle('scrolled', window.scrollY > 30);
+  }
+  window.addEventListener('scroll', function(){
+    if (!navTicking) { window.requestAnimationFrame(updateNavbar); navTicking = true; }
+  }, { passive: true });
+  updateNavbar();
+
+  // ------------------------------------------------------------------
+  // Rafraîchissement automatique
+  // ------------------------------------------------------------------
+  document.addEventListener('visibilitychange', function(){
+    if (document.visibilityState === 'visible') loadConfig({});
+  });
+  window.addEventListener('online', function(){ loadConfig({ forceFresh: true }); });
+  window.addEventListener('offline', function(){ setOffline(true); });
+  setInterval(function(){ loadConfig({}); }, REFRESH_INTERVAL_MS);
+
+  // ------------------------------------------------------------------
+  // Bouton paramètres (code d'accès + panneau propriétaire)
+  // ------------------------------------------------------------------
+  function openOverlay(id){ $(id).classList.remove('hidden'); }
+  function closeOverlay(id){ $(id).classList.add('hidden'); }
+
+  $('#gear-btn').addEventListener('click', function(){
+    $('#gate-code').value = '';
+    $('#gate-error').style.display = 'none';
+    openOverlay('#gate-overlay');
+    setTimeout(function(){ $('#gate-code').focus(); }, 50);
+  });
+  $('#gate-cancel').addEventListener('click', function(){ closeOverlay('#gate-overlay'); });
+  $('#gate-overlay').addEventListener('click', function(ev){ if (ev.target === this) closeOverlay('#gate-overlay'); });
+
+  $('#gate-form').addEventListener('submit', function(ev){
+    ev.preventDefault();
+    if ($('#gate-code').value.trim() === OWNER_CODE) {
+      closeOverlay('#gate-overlay');
+      $('#owner-api-url').value = apiUrl();
+      renderOwnerStatus((state.config && state.config.settings) || {});
+      openOverlay('#owner-overlay');
+    } else {
+      var e = $('#gate-error'); e.textContent = 'Code incorrect.'; e.style.display = 'block';
+    }
+  });
+
+  $('#owner-close').addEventListener('click', function(){ closeOverlay('#owner-overlay'); });
+  $('#owner-overlay').addEventListener('click', function(ev){ if (ev.target === this) closeOverlay('#owner-overlay'); });
+
+  $('#owner-save-url').addEventListener('click', function(){
+    var v = $('#owner-api-url').value.trim();
+    if (v) localStorage.setItem(LS_API_URL, v); else localStorage.removeItem(LS_API_URL);
+    toast('Lien sauvegardé');
+    loadConfig({ forceFresh: true });
+  });
+
+  $('#owner-test').addEventListener('click', function(){
+    var btn = $('#owner-test'); var prev = btn.textContent;
+    btn.disabled = true; btn.textContent = 'Test en cours…';
+    fetchConfig().then(function(){
+      toast('Connexion réussie'); renderOwnerStatus(state.config.settings);
+    }).catch(function(err){
+      toast(err.message === 'no-url' ? 'Aucun lien configuré' : 'Connexion impossible', true);
+    }).finally(function(){ btn.disabled = false; btn.textContent = prev; });
+  });
+
+  $('#owner-refresh').addEventListener('click', function(){
+    loadConfig({ forceFresh: true }).then(function(cfg){
+      toast(cfg ? 'Catalogue actualisé' : 'Impossible d\'actualiser pour le moment', !cfg);
+    });
+  });
+
+  $('#owner-save-whatsapp').addEventListener('click', function(){
+    var v = $('#owner-whatsapp').value.trim();
+    if (!v) { toast('Entrez un numéro', true); return; }
+    localStorage.setItem(LS_LOCAL_WA, v);
+    toast('Numéro local appliqué');
+    render();
+  });
+  $('#owner-reset-whatsapp').addEventListener('click', function(){
+    localStorage.removeItem(LS_LOCAL_WA);
+    $('#owner-whatsapp').value = '';
+    toast('Numéro public rétabli');
+    render();
+  });
+
+  $('#prep-generate').addEventListener('click', function(){
+    var cols = [
+      $('#prep-id').value.trim(),
+      $('#prep-name').value.trim(),
+      $('#prep-price').value.trim().replace(',', '.') || '0',
+      $('#prep-unit').value.trim(),
+      $('#prep-image').value.trim() || '-',
+      $('#prep-active').value,
+      $('#prep-available').value,
+      $('#prep-desc').value.trim(),
+      $('#prep-sort').value.trim() || '0'
+    ];
+    if (!cols[0] || !cols[1]) {
+      toast('Renseignez au moins l\'identifiant et le nom', true);
+      return;
+    }
+    var line = cols.join('\t');
+    var lineEl = $('#prep-line');
+    lineEl.textContent = line;
+    lineEl.classList.add('show');
+    $('#prep-note').classList.remove('hidden');
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(line).then(function(){
+        toast('Ligne copiée — collez-la dans le tableau');
+      }).catch(function(){
+        toast('Ligne prête — sélectionnez-la puis copiez-la');
+      });
+    } else {
+      toast('Ligne prête — sélectionnez-la puis copiez-la');
+    }
+  });
+
+  $('#owner-clear-cache').addEventListener('click', function(){
+    if (!confirm('Vider le catalogue en cache sur cet appareil ?')) return;
+    localStorage.removeItem(LS_CONFIG);
+    if (window.caches) { caches.keys().then(function(keys){ keys.forEach(function(k){ caches.delete(k); }); }); }
+    toast('Cache local vidé');
+    state.config = null;
+    loadConfig({ forceFresh: true });
+  });
+
+  // ------------------------------------------------------------------
+  // Service worker
+  // ------------------------------------------------------------------
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function(){
+      navigator.serviceWorker.register('sw.js').catch(function(){ /* mode fichier local : ignoré */ });
+    });
+  }
+
+  // ------------------------------------------------------------------
+  // Démarrage
+  // ------------------------------------------------------------------
+  observeReveals();
+  loadConfig({});
+})();
+</script>
+</body>
+</html>
