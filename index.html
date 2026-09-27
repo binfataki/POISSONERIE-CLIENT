@@ -536,7 +536,13 @@
   // ------------------------------------------------------------------
   var OWNER_CODE = "4321";
   var REFRESH_INTERVAL_MS = 3 * 60 * 1000; // 3 minutes
-  var DEFAULT_API_URL = "https://script.google.com/macros/s/AKfycbzOA1WrDQs1HZvbkcrS4LrK9upJnJI0PzPk_Dx-9vuwbYkx6kOrVBhgwevXhPYEGAoC/exec";
+  // Lien de synchronisation désactivé : le déploiement Apps Script fourni
+  // répond 404 (deployment introuvable / non publié en "Application Web"
+  // avec accès "Tout le monde"). En attendant un lien valide, le portail
+  // reste fiable en s'appuyant sur le catalogue intégré ci-dessous.
+  // Pour réactiver la synchronisation : renseignez un lien /exec valide
+  // ici, ou via le panneau propriétaire (icône ⚙, code 4321).
+  var DEFAULT_API_URL = "";
 
   var LS_API_URL   = "pde_client_api_url_v1";
   var LS_CONFIG    = "pde_client_config_cache_v1";
@@ -547,22 +553,22 @@
   // réseau est indisponible et qu'aucune donnée n'a encore été mise en cache.
   var FALLBACK_CONFIG = {
     settings: {
-      brandName: "Poissonnerie de l'Est",
-      subtitle: "Makayabo yetu ya qualité, faites-nous confiance.",
-      whatsappNumber: "+243810325549",
+      brandName: "POISSONNERIE DE L'EST",
+      subtitle: "L'EXPERIENCE DE L'EST",
+      whatsappNumber: "243977849144",
       announcementActive: true,
-      announcementText: "Bienvenue chez Poissonnerie de l'Est. Commandez directement via WhatsApp.",
+      announcementText: "Bienvenue chez la Poissonnerie de l'Est. Commandez directement via WhatsApp.",
       currency: "USD",
       lastUpdatedLabel: "Dernière mise à jour",
       updatedAt: ""
     },
     products: [
-      { productId:"PR001", name:"Petit capitaine", price:0, unit:"pièce", image:"assets/PETIT CAPITAIN.jpg", active:true, available:true, description:"Poisson salé de qualité, idéal pour la cuisine familiale.", sortOrder:1 },
-      { productId:"PR002", name:"Tilapia Makoke", price:0, unit:"pièce", image:"assets/TILAPIA(Makoke).jpg", active:true, available:true, description:"Tilapia préparé, sélectionné pour sa bonne conservation.", sortOrder:2 },
-      { productId:"PR003", name:"Makayabo qualité A", price:0, unit:"kg", image:"assets/MAKAYABO A.jpg", active:true, available:true, description:"Makayabo salé, bon goût et bonne texture.", sortOrder:3 },
-      { productId:"PR004", name:"Makayabo sélection", price:0, unit:"kg", image:"assets/MAKAYABO B.jpg", active:true, available:true, description:"Sélection de poissons salés pour commandes régulières.", sortOrder:4 },
-      { productId:"PR005", name:"Poisson salé", price:0, unit:"kg", image:"assets/MAKAYABO C.jpg", active:true, available:true, description:"Produit disponible selon arrivage.", sortOrder:5 },
-      { productId:"PR006", name:"Munama", price:0, unit:"kg", image:"assets/PR(MUNAMA).jpg", active:true, available:true, description:"Munama de qualité, bien séché.", sortOrder:6 },
+      { productId:"PR001", name:"Petit capitaine", price:1, unit:"pièce", image:"assets/PETIT CAPITAIN.jpg", active:true, available:true, description:"Poisson salé de qualité, idéal pour la cuisine familiale.", sortOrder:1 },
+      { productId:"PR002", name:"Tilapia Makoke", price:9, unit:"pièce", image:"assets/TILAPIA(Makoke).jpg", active:true, available:true, description:"Tilapia préparé, sélectionné pour sa bonne conservation.", sortOrder:2 },
+      { productId:"PR003", name:"Makayabo qualité A", price:2, unit:"kg", image:"assets/MAKAYABO A.jpg", active:true, available:true, description:"Makayabo salé, bon goût et bonne texture.", sortOrder:3 },
+      { productId:"PR004", name:"Makayabo sélection", price:8, unit:"kg", image:"assets/MAKAYABO B.jpg", active:true, available:true, description:"Sélection de poissons salés pour commandes régulières.", sortOrder:4 },
+      { productId:"PR005", name:"Poisson salé", price:3, unit:"kg", image:"assets/MAKAYABO C.jpg", active:true, available:true, description:"Produit disponible selon arrivage.", sortOrder:5 },
+      { productId:"PR006", name:"Munama", price:7, unit:"kg", image:"assets/PR(MUNAMA).jpg", active:true, available:true, description:"Munama de qualité, bien séché.", sortOrder:6 },
       { productId:"PR007", name:"Gros capitaine", price:0, unit:"kg", image:"assets/GROS CAPITAINE.jpg", active:true, available:true, description:"Gros capitaine salé, selon arrivage.", sortOrder:7 },
       { productId:"PR008", name:"Ngasia", price:0, unit:"kg", image:"assets/NGASIA.jpg", active:true, available:true, description:"Ngasia soigneusement préparé.", sortOrder:8 },
       { productId:"PR009", name:"Nzobo", price:0, unit:"kg", image:"assets/NZOBO.jpg", active:true, available:true, description:"Nzobo fumé et préparé avec soin.", sortOrder:9 },
