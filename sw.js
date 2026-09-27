@@ -14,7 +14,7 @@
  * Pour forcer une mise à jour de la coquille chez les visiteurs après une
  * modification du site, incrémentez CACHE_VERSION.
  */
-const CACHE_VERSION = 'pde-client-v1';
+const CACHE_VERSION = 'pde-client-v2';
 const APP_SHELL = [
   './index.html',
   './manifest.webmanifest',
