@@ -22,6 +22,7 @@
     --gold-light: #E4C766;
     --cream: #F5EFE0;
     --sunset: #D86A3F;
+    --foam: #CFE6E2;
     --ink: #16232E;
     --ink-soft: #5C6B74;
     --line: #E3DCC8;
@@ -30,34 +31,131 @@
     --radius-md: 16px;
     --radius-sm: 10px;
     --shadow: 0 10px 26px rgba(11,42,74,0.10);
+    --shadow-lg: 0 22px 46px rgba(7,28,49,0.22);
+    --nav-h: 58px;
+    --ease: cubic-bezier(.22,.9,.32,1);
   }
   *{ box-sizing:border-box; }
   html,body{ height:100%; }
+  html{ scroll-behavior:smooth; }
   body{
     margin:0; background: var(--cream); color: var(--ink);
     font-family:'Inter', system-ui, sans-serif; -webkit-font-smoothing:antialiased;
-    padding-top: env(safe-area-inset-top,0px); padding-bottom: env(safe-area-inset-bottom,0px);
+    padding-bottom: env(safe-area-inset-bottom,0px);
   }
   h1,h2,h3{ font-family:'Fraunces', serif; margin:0; }
   img{ max-width:100%; display:block; }
   button{ font-family:inherit; }
   .hidden{ display:none !important; }
   a{ color:inherit; }
+  section{ scroll-margin-top: calc(var(--nav-h) + 10px); }
+
+  /* ---------- Reveal-on-scroll ---------- */
+  .reveal{
+    opacity:0; transform: translateY(18px);
+    transition: opacity .6s var(--ease), transform .6s var(--ease);
+    will-change: opacity, transform;
+  }
+  .reveal.in-view{ opacity:1; transform:none; }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *, *::before, *::after{
+      animation-duration:.001ms !important; animation-iteration-count:1 !important;
+      transition-duration:.001ms !important;
+    }
+    .reveal{ opacity:1 !important; transform:none !important; }
+  }
+
+  /* ---------- Navbar ---------- */
+  .navbar{
+    position:fixed; top:0; left:0; right:0; z-index:35; height: calc(var(--nav-h) + env(safe-area-inset-top,0px));
+    padding-top: env(safe-area-inset-top,0px);
+    background: rgba(7,28,49,0); border-bottom:1px solid rgba(255,255,255,0);
+    transition: background .35s var(--ease), border-color .35s var(--ease), box-shadow .35s var(--ease);
+  }
+  .navbar.scrolled{
+    background: rgba(7,28,49,.86); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border-bottom-color: rgba(255,255,255,.08); box-shadow: 0 8px 24px rgba(7,28,49,.18);
+  }
+  .navbar-inner{
+    height:100%; max-width:1040px; margin:0 auto; padding:0 16px;
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+  }
+  .navbar-brand{ display:flex; align-items:center; gap:9px; text-decoration:none; min-width:0; }
+  .navbar-logo{ width:26px; height:26px; border-radius:7px; object-fit:cover; flex-shrink:0; }
+  .navbar-brand span{
+    color:var(--cream); font-family:'Fraunces',serif; font-weight:600; font-size:.94rem;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .navbar-links{ display:flex; align-items:center; gap:4px; }
+  .navbar-links a{
+    text-decoration:none; color: rgba(245,239,224,.82); font-size:.82rem; font-weight:600;
+    padding:8px 10px; border-radius:999px; transition: color .2s ease, background .2s ease;
+  }
+  .navbar-links a:hover{ color:#fff; background: rgba(255,255,255,.08); }
+  .navbar-links .navbar-cta{
+    background: var(--gold); color: var(--navy-deep) !important; padding:9px 16px; margin-left:2px;
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  .navbar-links .navbar-cta:hover{ background: var(--gold-light); }
+  .navbar-links a:not(.navbar-cta) span.nav-label-full{ display:inline; }
+  @media (max-width:420px){
+    .navbar-links a:not(.navbar-cta){ padding:8px 7px; font-size:.78rem; }
+  }
 
   /* ---------- Header / hero ---------- */
   .hero{
+    position:relative; overflow:hidden;
     background: radial-gradient(130% 100% at 50% -20%, var(--ocean) 0%, var(--navy) 55%, var(--navy-deep) 100%);
     color: var(--cream);
-    padding: calc(30px + env(safe-area-inset-top,0px)) 20px 34px;
+    padding: calc(34px + var(--nav-h) + env(safe-area-inset-top,0px)) 20px 58px;
     text-align:center;
   }
-  .hero img.logo{ width:76px; margin:0 auto 12px; }
-  .hero h1{ font-size:1.7rem; font-weight:700; line-height:1.2; }
-  .hero p.subtitle{ margin:8px auto 0; max-width:420px; font-size:.92rem; color: rgba(245,239,224,.82); }
+  .hero::before{
+    content:''; position:absolute; inset:0; pointer-events:none; opacity:.5;
+    background:
+      radial-gradient(420px 220px at 14% 18%, rgba(201,162,39,.16), transparent 60%),
+      radial-gradient(360px 200px at 86% 6%, rgba(255,255,255,.08), transparent 60%);
+  }
+  .hero-inner{ position:relative; max-width:520px; margin:0 auto; }
+  .hero-inner .logo{
+    width:72px; height:72px; border-radius:18px; object-fit:cover; margin:0 auto 16px;
+    box-shadow: 0 10px 26px rgba(0,0,0,.28); opacity:0; animation: heroPop .7s var(--ease) .05s forwards;
+  }
+  .hero h1{
+    font-size:1.9rem; font-weight:700; line-height:1.18;
+    opacity:0; animation: heroUp .7s var(--ease) .16s forwards;
+  }
+  .hero p.subtitle{
+    margin:9px auto 0; max-width:420px; font-size:.95rem; color: rgba(245,239,224,.86);
+    opacity:0; animation: heroUp .7s var(--ease) .27s forwards;
+  }
+  .hero p.hero-desc{
+    margin:14px auto 0; max-width:400px; font-size:.85rem; line-height:1.55; color: rgba(245,239,224,.72);
+    opacity:0; animation: heroUp .7s var(--ease) .36s forwards;
+  }
+  .hero-cta{
+    margin-top:24px; display:inline-flex; align-items:center; gap:9px;
+    background: var(--gold); color: var(--navy-deep); text-decoration:none; font-weight:700; font-size:.94rem;
+    padding:14px 24px; border-radius:999px; box-shadow: 0 14px 30px rgba(0,0,0,.25);
+    opacity:0; animation: heroUp .7s var(--ease) .46s forwards;
+    transition: transform .25s var(--ease), box-shadow .25s var(--ease), background .2s ease;
+  }
+  .hero-cta:hover{ background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 18px 34px rgba(0,0,0,.3); }
+  .hero-cta:active{ transform: translateY(0) scale(.98); }
+  .hero-cta svg{ width:16px; height:16px; animation: chevBounce 1.8s ease-in-out 1.4s 3; }
+
+  @keyframes heroPop{ from{ opacity:0; transform: scale(.82) translateY(6px);} to{ opacity:1; transform:none; } }
+  @keyframes heroUp{ from{ opacity:0; transform: translateY(14px);} to{ opacity:1; transform:none; } }
+  @keyframes chevBounce{ 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(4px);} }
+
+  .hero-wave{ display:block; width:100%; height:34px; margin-top:-1px; }
+  .hero-wave path{ fill: var(--cream); }
 
   /* ---------- Announcement ---------- */
   .announcement{
-    max-width:640px; margin: -20px auto 0; padding: 0 16px;
+    max-width:640px; margin: -20px auto 0; padding: 0 16px; position:relative; z-index:2;
   }
   .announcement .box{
     background:#fff; border-left:4px solid var(--gold);
@@ -76,11 +174,32 @@
   .status-strip.offline .dot{ background: var(--sunset); }
   .status-strip.hidden{ display:none; }
 
+  /* ---------- Trust section ---------- */
+  .trust{ max-width:960px; margin:0 auto; padding: 30px 16px 6px; }
+  .trust h2{ font-size:1.1rem; color: var(--navy); text-align:center; margin-bottom:18px; }
+  .trust-grid{
+    display:grid; grid-template-columns: repeat(2,1fr); gap:12px;
+  }
+  @media (min-width:640px){ .trust-grid{ grid-template-columns: repeat(4,1fr); } }
+  .trust-item{
+    background:#fff; border-radius: var(--radius-md); padding:16px 14px; text-align:center;
+    box-shadow: var(--shadow); transition: transform .3s var(--ease), box-shadow .3s var(--ease);
+  }
+  .trust-item:hover{ transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+  .trust-item .ico{
+    width:42px; height:42px; margin:0 auto 10px; border-radius:12px; background: var(--foam);
+    display:flex; align-items:center; justify-content:center; font-size:1.2rem;
+  }
+  .trust-item h3{ font-size:.86rem; color: var(--navy); font-weight:600; margin-bottom:5px; }
+  .trust-item p{ font-size:.74rem; color: var(--ink-soft); line-height:1.45; margin:0; }
+
   /* ---------- Products ---------- */
-  .catalog{ max-width:960px; margin:0 auto; padding: 26px 16px 50px; }
-  .catalog h2{ font-size:1.2rem; color: var(--navy); margin-bottom:14px; }
+  .catalog{ max-width:960px; margin:0 auto; padding: 34px 16px 20px; }
+  .catalog-head{ margin-bottom:16px; }
+  .catalog-head h2{ font-size:1.25rem; color: var(--navy); }
+  .catalog-head p{ font-size:.82rem; color: var(--ink-soft); margin-top:4px; }
   .grid{
-    display:grid; grid-template-columns: 1fr; gap:16px;
+    display:grid; grid-template-columns: 1fr; gap:18px;
   }
   @media (min-width: 620px){ .grid{ grid-template-columns: 1fr 1fr; } }
   @media (min-width: 960px){ .grid{ grid-template-columns: 1fr 1fr 1fr; } }
@@ -88,38 +207,66 @@
   .card{
     background:#fff; border-radius: var(--radius-lg); overflow:hidden;
     box-shadow: var(--shadow); display:flex; flex-direction:column;
+    transition: transform .35s var(--ease), box-shadow .35s var(--ease);
   }
+  .card:hover{ transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+  .card:active{ transform: translateY(-1px) scale(.995); }
+
+  .card .card-media{ position:relative; }
   .card .img-wrap{
     aspect-ratio: 4 / 3; background: var(--ocean-soft); position:relative; overflow:hidden;
   }
-  .card .img-wrap img{ width:100%; height:100%; object-fit:cover; }
-  .card .img-wrap.hidden{ display:none; }
-  .card .body{ padding:14px 15px 16px; display:flex; flex-direction:column; gap:8px; flex:1; }
-  .card.is-unavailable .body{ padding-top:16px; }
-  .card .name{ font-family:'Fraunces',serif; font-weight:600; font-size:1.04rem; color: var(--ink); line-height:1.25; display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
-  .card .sold-out-badge{
-    background: var(--sunset); color:#fff; font-size:.66rem; font-weight:700;
-    padding:4px 10px; border-radius:999px; letter-spacing:.02em; font-family:'Inter',sans-serif;
-    white-space:nowrap;
+  .card .img-wrap img{
+    width:100%; height:100%; object-fit:cover; transition: transform .6s var(--ease), filter .3s ease, opacity .3s ease;
   }
-  .card .desc{ font-size:.82rem; color: var(--ink-soft); line-height:1.4; }
-  .card .price-row{ display:flex; align-items:baseline; justify-content:space-between; margin-top:auto; padding-top:4px; }
-  .card .price{ font-family:'Fraunces',serif; font-weight:700; font-size:1.15rem; color: var(--navy); }
-  .card .price.on-request{ font-size:.86rem; font-weight:600; color: var(--ink-soft); }
-  .card .unit{ font-size:.76rem; color: var(--ink-soft); }
+  .card:hover .img-wrap img{ transform: scale(1.06); }
+  .card .img-wrap.is-unavailable img{ filter: grayscale(.4) saturate(.75); opacity:.82; }
+  .card .img-wrap.hidden{ display:none; }
+  .card .img-placeholder{
+    aspect-ratio: 4/3; background: linear-gradient(150deg, var(--ocean-soft), var(--foam));
+    display:flex; align-items:center; justify-content:center; font-size:2.2rem;
+  }
+  .card .card-media::after{
+    content:''; position:absolute; left:0; right:0; bottom:0; height:46%; pointer-events:none;
+    background: linear-gradient(to top, rgba(7,28,49,.42), rgba(7,28,49,0));
+  }
+  .card .sold-out-badge{
+    position:absolute; top:10px; left:10px; z-index:2;
+    background: rgba(216,106,63,.94); color:#fff; font-size:.66rem; font-weight:700;
+    padding:5px 11px; border-radius:999px; letter-spacing:.02em; font-family:'Inter',sans-serif;
+    white-space:nowrap; box-shadow: 0 4px 10px rgba(0,0,0,.18);
+  }
+  .card .price-tag{
+    position:absolute; left:12px; bottom:12px; z-index:2;
+    background: rgba(255,255,255,.95); backdrop-filter: blur(4px);
+    border-radius:999px; padding:6px 13px; box-shadow: var(--shadow);
+  }
+  .card .price{ font-family:'Fraunces',serif; font-weight:700; font-size:1.02rem; color: var(--navy); }
+  .card .price.on-request{ font-size:.78rem; font-weight:600; color: var(--ink-soft); }
+
+  .card .body{ padding:15px 16px 16px; display:flex; flex-direction:column; gap:7px; flex:1; }
+  .card .name{ font-family:'Fraunces',serif; font-weight:600; font-size:1.05rem; color: var(--ink); line-height:1.28; }
+  .card .desc{ font-size:.82rem; color: var(--ink-soft); line-height:1.45; }
+  .card .meta-row{ display:flex; align-items:center; justify-content:space-between; margin-top:auto; padding-top:2px; }
+  .card .unit{ font-size:.74rem; color: var(--ink-soft); }
+
   .card .wa-btn{
     margin-top:6px; display:flex; align-items:center; justify-content:center; gap:8px;
     background: var(--gold); color: var(--navy-deep); border:none; border-radius: var(--radius-sm);
-    padding:11px 14px; font-weight:700; font-size:.88rem; cursor:pointer; text-decoration:none;
+    padding:12px 14px; font-weight:700; font-size:.88rem; cursor:pointer; text-decoration:none;
+    transition: background .2s ease, transform .18s var(--ease), box-shadow .2s ease;
   }
+  .card .wa-btn:hover{ background: var(--gold-light); box-shadow: 0 8px 18px rgba(201,162,39,.28); }
+  .card .wa-btn:active{ transform: scale(.97); }
   .card .wa-btn svg{ width:16px; height:16px; flex-shrink:0; }
   .card .wa-btn.is-disabled{ background: var(--ocean-soft); color: var(--ink-soft); pointer-events:none; }
+  .card .wa-btn.is-loading{ opacity:.86; }
 
   .empty{ text-align:center; padding:50px 20px; color: var(--ink-soft); }
 
   /* ---------- Footer ---------- */
   footer{
-    text-align:center; padding: 18px 16px calc(28px + env(safe-area-inset-bottom,0px));
+    text-align:center; padding: 26px 16px calc(30px + env(safe-area-inset-bottom,0px));
     color: var(--ink-soft); font-size:.76rem;
   }
 
@@ -128,22 +275,27 @@
     position:fixed; right:16px; bottom: calc(16px + env(safe-area-inset-bottom,0px));
     width:42px; height:42px; border-radius:50%; border:none; cursor:pointer;
     background: rgba(11,42,74,.55); color: var(--cream); display:flex; align-items:center; justify-content:center;
-    box-shadow: var(--shadow); z-index:30; opacity:.55; transition: opacity .15s ease;
+    box-shadow: var(--shadow); z-index:30; opacity:.55; transition: opacity .15s ease, transform .2s ease;
   }
   .gear-btn:hover, .gear-btn:focus{ opacity:1; }
+  .gear-btn:active{ transform: scale(.92); }
   .gear-btn svg{ width:19px; height:19px; }
 
   /* ---------- Modals ---------- */
   .overlay{
     position:fixed; inset:0; background: rgba(7,28,49,.55); z-index:40;
     display:flex; align-items:flex-end; justify-content:center; padding:0;
+    animation: overlayIn .2s ease;
   }
+  @keyframes overlayIn{ from{ opacity:0; } to{ opacity:1; } }
   @media (min-width:560px){ .overlay{ align-items:center; } }
   .sheet{
     background: var(--cream); width:100%; max-width:420px;
     border-radius: 22px 22px 0 0; padding:22px 22px calc(22px + env(safe-area-inset-bottom,0px));
     max-height:88vh; overflow-y:auto; box-shadow: var(--shadow);
+    animation: sheetUp .28s var(--ease);
   }
+  @keyframes sheetUp{ from{ opacity:0; transform: translateY(24px); } to{ opacity:1; transform:none; } }
   @media (min-width:560px){ .sheet{ border-radius: var(--radius-lg); } }
   .sheet h3{ font-size:1.1rem; color: var(--navy); margin-bottom:4px; }
   .sheet .sub{ font-size:.8rem; color: var(--ink-soft); margin-bottom:16px; }
@@ -156,6 +308,7 @@
   .field input, .field select, .field textarea{
     width:100%; padding:12px 13px; border-radius: var(--radius-sm); border:1.5px solid var(--line);
     background:#fff; font-size:1rem; color: var(--ink); outline:none; font-family:inherit;
+    transition: border-color .2s ease;
   }
   .field select{ appearance:none; }
   .field input:focus, .field select:focus, .field textarea:focus{ border-color: var(--ocean); }
@@ -176,7 +329,9 @@
   .btn{
     appearance:none; border:none; cursor:pointer; border-radius: var(--radius-sm);
     font-weight:700; font-size:.9rem; padding:12px 16px; width:100%; margin-bottom:9px;
+    transition: transform .15s var(--ease), opacity .15s ease;
   }
+  .btn:active{ transform: scale(.98); }
   .btn-primary{ background: var(--navy); color: var(--cream); }
   .btn-gold{ background: var(--gold); color: var(--navy-deep); }
   .btn-outline{ background: transparent; color: var(--navy); border:1.5px solid var(--navy); }
@@ -206,10 +361,32 @@
 </head>
 <body>
 
-  <header class="hero">
-    <img class="logo" src="logo.png" alt="Poissonnerie de l'Est">
-    <h1 id="brand-name">Poissonnerie de l'Est</h1>
-    <p class="subtitle" id="brand-subtitle">Makayabo yetu ya qualité, faites-nous confiance.</p>
+  <nav class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <a href="#top" class="navbar-brand">
+        <img class="navbar-logo" src="logo.png" alt="">
+        <span id="brand-name-mini">Poissonnerie de l'Est</span>
+      </a>
+      <div class="navbar-links">
+        <a href="#top"><span class="nav-label-full">Accueil</span></a>
+        <a href="#catalog"><span class="nav-label-full">Produits</span></a>
+        <a href="#" id="nav-order" class="wa-btn navbar-cta" target="_blank" rel="noopener"><span class="wa-label">Commander</span></a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero" id="top">
+    <div class="hero-inner">
+      <img class="logo" src="logo.png" alt="Poissonnerie de l'Est">
+      <h1 id="brand-name">Poissonnerie de l'Est</h1>
+      <p class="subtitle" id="brand-subtitle">Makayabo yetu ya qualité, faites-nous confiance.</p>
+      <p class="hero-desc">Grossiste et revendeur de poisson salé &amp; makayabo. Parcourez notre sélection et commandez en quelques secondes, directement sur WhatsApp.</p>
+      <a href="#catalog" class="hero-cta">
+        <span>Découvrir nos produits</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </a>
+    </div>
+    <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0,32 C 240,64 480,0 720,18 C 960,36 1200,54 1440,24 L1440,60 L0,60 Z"></path></svg>
   </header>
 
   <div class="announcement hidden" id="announcement">
@@ -220,10 +397,23 @@
     <span class="dot"></span><span id="status-text">Hors ligne — dernier catalogue affiché</span>
   </div>
 
-  <main class="catalog">
-    <h2>Catalogue</h2>
+  <main class="catalog" id="catalog">
+    <div class="catalog-head reveal">
+      <h2>Notre catalogue</h2>
+      <p>Disponibilité selon arrivage — appuyez sur un produit pour commander via WhatsApp.</p>
+    </div>
     <div id="grid" class="grid"></div>
   </main>
+
+  <section class="trust" aria-labelledby="trust-title">
+    <h2 id="trust-title" class="reveal">Pourquoi commander chez nous ?</h2>
+    <div class="trust-grid">
+      <div class="trust-item reveal"><div class="ico">🐟</div><h3>Produits sélectionnés</h3><p>Poisson salé et makayabo choisis avec soin.</p></div>
+      <div class="trust-item reveal" style="transition-delay:70ms"><div class="ico">📦</div><h3>Disponibilité selon arrivage</h3><p>Le catalogue reflète nos arrivages réels.</p></div>
+      <div class="trust-item reveal" style="transition-delay:140ms"><div class="ico">💬</div><h3>Commande directe WhatsApp</h3><p>Un message clair, sans compte ni panier.</p></div>
+      <div class="trust-item reveal" style="transition-delay:210ms"><div class="ico">🤝</div><h3>Service client</h3><p>Nous confirmons prix et disponibilité avec vous.</p></div>
+    </div>
+  </section>
 
   <footer>
     <div id="footer-updated">—</div>
@@ -367,12 +557,16 @@
       updatedAt: ""
     },
     products: [
-      { productId:"PR001", name:"Petit capitaine", price:0, unit:"pièce", image:"assets/PR(PETIT CAPITAINE).jpg", active:true, available:true, description:"Poisson salé de qualité, idéal pour la cuisine familiale.", sortOrder:1 },
-      { productId:"PR002", name:"Tilapia Makoke", price:0, unit:"pièce", image:"assets/PR(TILAPIA(Makoke)).jpg", active:true, available:true, description:"Tilapia préparé, sélectionné pour sa bonne conservation.", sortOrder:2 },
-      { productId:"PR003", name:"Makayabo qualité A", price:0, unit:"kg", image:"assets/PR(00).jpg", active:true, available:true, description:"Makayabo salé, bon goût et bonne texture.", sortOrder:3 },
-      { productId:"PR004", name:"Makayabo sélection", price:0, unit:"kg", image:"assets/PR(11).jpg", active:true, available:true, description:"Sélection de poissons salés pour commandes régulières.", sortOrder:4 },
-      { productId:"PR005", name:"Poisson salé", price:0, unit:"kg", image:"assets/PR(22).jpg", active:true, available:true, description:"Produit disponible selon arrivage.", sortOrder:5 },
-      { productId:"PR006", name:"Munama", price:0, unit:"kg", image:"assets/PR(MUNAMA).jpg", active:true, available:true, description:"Munama de qualité, bien séché.", sortOrder:6 }
+      { productId:"PR001", name:"Petit capitaine", price:0, unit:"pièce", image:"assets/PETIT CAPITAIN.jpg", active:true, available:true, description:"Poisson salé de qualité, idéal pour la cuisine familiale.", sortOrder:1 },
+      { productId:"PR002", name:"Tilapia Makoke", price:0, unit:"pièce", image:"assets/TILAPIA(Makoke).jpg", active:true, available:true, description:"Tilapia préparé, sélectionné pour sa bonne conservation.", sortOrder:2 },
+      { productId:"PR003", name:"Makayabo qualité A", price:0, unit:"kg", image:"assets/MAKAYABO A.jpg", active:true, available:true, description:"Makayabo salé, bon goût et bonne texture.", sortOrder:3 },
+      { productId:"PR004", name:"Makayabo sélection", price:0, unit:"kg", image:"assets/MAKAYABO B.jpg", active:true, available:true, description:"Sélection de poissons salés pour commandes régulières.", sortOrder:4 },
+      { productId:"PR005", name:"Poisson salé", price:0, unit:"kg", image:"assets/MAKAYABO C.jpg", active:true, available:true, description:"Produit disponible selon arrivage.", sortOrder:5 },
+      { productId:"PR006", name:"Munama", price:0, unit:"kg", image:"assets/PR(MUNAMA).jpg", active:true, available:true, description:"Munama de qualité, bien séché.", sortOrder:6 },
+      { productId:"PR007", name:"Gros capitaine", price:0, unit:"kg", image:"assets/GROS CAPITAINE.jpg", active:true, available:true, description:"Gros capitaine salé, selon arrivage.", sortOrder:7 },
+      { productId:"PR008", name:"Ngasia", price:0, unit:"kg", image:"assets/NGASIA.jpg", active:true, available:true, description:"Ngasia soigneusement préparé.", sortOrder:8 },
+      { productId:"PR009", name:"Nzobo", price:0, unit:"kg", image:"assets/NZOBO.jpg", active:true, available:true, description:"Nzobo fumé et préparé avec soin.", sortOrder:9 },
+      { productId:"PR010", name:"Roso", price:0, unit:"kg", image:"assets/ROSO.jpg", active:true, available:true, description:"Roso de qualité, selon arrivage.", sortOrder:10 },
     ]
   };
 
@@ -435,6 +629,35 @@
   function escapeHtml_(s){
     return String(s === null || s === undefined ? '' : s)
       .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // Message WhatsApp adapté au produit : reprend le prix s'il est connu,
+  // demande le prix actuel sinon. Reste court et directement exploitable.
+  function orderMessage(p, currency){
+    var lines = [
+      "Bonjour Poissonnerie de l'Est 👋",
+      "",
+      "Je souhaite passer une commande pour :",
+      "🐟 " + p.name + (p.unit ? ' (' + p.unit + ')' : '')
+    ];
+    if (p.price) {
+      lines.push("💰 Prix indiqué : " + fmtPrice(p.price, currency));
+      lines.push("", "Merci de confirmer la disponibilité actuelle.");
+    } else {
+      lines.push("", "Le prix est « sur demande » — merci de me communiquer le prix actuel.");
+    }
+    lines.push("", "Je reste disponible pour préciser la quantité souhaitée. Merci.");
+    return lines.join("\n");
+  }
+  function generalOrderMessage(){
+    return [
+      "Bonjour Poissonnerie de l'Est 👋",
+      "",
+      "Je souhaite passer une commande.",
+      "Pourriez-vous m'indiquer les produits disponibles et leurs prix actuels ?",
+      "",
+      "Merci."
+    ].join("\n");
   }
 
   // ------------------------------------------------------------------
@@ -517,8 +740,12 @@
     var whatsapp = localWhatsapp() || settings.whatsappNumber || '';
 
     $('#brand-name').textContent = settings.brandName || "Poissonnerie de l'Est";
+    $('#brand-name-mini').textContent = settings.brandName || "Poissonnerie de l'Est";
     $('#brand-subtitle').textContent = settings.subtitle || '';
     document.title = settings.brandName || "Poissonnerie de l'Est";
+
+    var navOrder = $('#nav-order');
+    navOrder.href = whatsapp ? waLink(whatsapp, generalOrderMessage()) : '#catalog';
 
     var ann = $('#announcement');
     if (settings.announcementActive && settings.announcementText) {
@@ -533,6 +760,7 @@
 
     renderGrid(products, whatsapp, settings.currency || 'USD');
     renderOwnerStatus(settings);
+    observeReveals();
   }
 
   function renderGrid(products, whatsapp, currency){
@@ -551,28 +779,32 @@
       return;
     }
 
-    grid.innerHTML = list.map(function(p){
+    grid.innerHTML = list.map(function(p, i){
       var unavailable = !p.available;
-      var message = 'Bonjour Poissonnerie de l\'Est, je suis intéressé par : ' + p.name + '.';
+      var message = orderMessage(p, currency);
       var priceHtml = p.price
         ? '<span class="price">' + escapeHtml_(fmtPrice(p.price, currency)) + '</span>'
         : '<span class="price on-request">Prix sur demande</span>';
-      var resolvedImg = unavailable ? '' : imagePath(p.image);
-      var imgHtml = resolvedImg
-        ? '<div class="img-wrap"><img src="' + escapeHtml_(resolvedImg) + '" alt="' + escapeHtml_(p.name) + '" loading="lazy" onerror="this.closest(\'.img-wrap\').classList.add(\'hidden\')"></div>'
-        : '';
+      var resolvedImg = imagePath(p.image);
+      var mediaHtml = resolvedImg
+        ? '<div class="img-wrap' + (unavailable ? ' is-unavailable' : '') + '"><img src="' + escapeHtml_(resolvedImg) + '" alt="' + escapeHtml_(p.name) + '" loading="lazy" onerror="this.closest(\'.card-media\').querySelector(\'.img-wrap\').classList.add(\'hidden\')"></div>'
+        : '<div class="img-placeholder" aria-hidden="true">🐟</div>';
+      var badgeHtml = unavailable ? '<span class="sold-out-badge">Épuisé pour le moment</span>' : '';
       var orderBtn = unavailable
-        ? '<span class="wa-btn is-disabled" aria-disabled="true">' + waIcon() + 'Indisponible' + '</span>'
-        : '<a class="wa-btn" target="_blank" rel="noopener" href="' + waLink(whatsapp, message) + '">' + waIcon() + 'Commander' + '</a>';
+        ? '<span class="wa-btn is-disabled" aria-disabled="true">' + waIcon() + '<span class="wa-label">Indisponible</span></span>'
+        : '<a class="wa-btn" target="_blank" rel="noopener" href="' + waLink(whatsapp, message) + '">' + waIcon() + '<span class="wa-label">Commander</span></a>';
+      var delay = (i % 6) * 65;
       return (
-        '<div class="card' + (unavailable ? ' is-unavailable' : '') + '">' +
-          imgHtml +
+        '<div class="card reveal' + (unavailable ? ' is-unavailable' : '') + '" style="transition-delay:' + delay + 'ms">' +
+          '<div class="card-media">' +
+            mediaHtml +
+            badgeHtml +
+            '<div class="price-tag">' + priceHtml + '</div>' +
+          '</div>' +
           '<div class="body">' +
-            '<div class="name">' + escapeHtml_(p.name) +
-              (unavailable ? '<span class="sold-out-badge">Épuisé pour le moment</span>' : '') +
-            '</div>' +
+            '<div class="name">' + escapeHtml_(p.name) + '</div>' +
             (p.description ? '<div class="desc">' + escapeHtml_(p.description) + '</div>' : '') +
-            '<div class="price-row">' + priceHtml + '<span class="unit">' + escapeHtml_(p.unit || '') + '</span></div>' +
+            '<div class="meta-row"><span class="unit">' + escapeHtml_(p.unit || '') + '</span></div>' +
             orderBtn +
           '</div>' +
         '</div>'
@@ -591,6 +823,64 @@
     $('#owner-local-badge').classList.toggle('hidden', !lw);
     $('#owner-whatsapp').value = lw;
   }
+
+  // ------------------------------------------------------------------
+  // Animations au défilement (IntersectionObserver)
+  // ------------------------------------------------------------------
+  var reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var supportsIO = 'IntersectionObserver' in window;
+  var revealObserver = null;
+
+  function observeReveals(){
+    var targets = $all('.reveal:not(.observed)');
+    if (!targets.length) return;
+    if (reduceMotion || !supportsIO) {
+      targets.forEach(function(el){ el.classList.add('observed', 'in-view'); });
+      return;
+    }
+    if (!revealObserver) {
+      revealObserver = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+    }
+    targets.forEach(function(el){
+      el.classList.add('observed');
+      revealObserver.observe(el);
+    });
+  }
+
+  // Micro-interaction sur les boutons WhatsApp : petit état visuel avant
+  // l'ouverture de WhatsApp, sans jamais bloquer le lien existant (waLink()).
+  document.addEventListener('click', function(ev){
+    var link = ev.target && ev.target.closest ? ev.target.closest('.wa-btn:not(.is-disabled)') : null;
+    if (!link) return;
+    var label = link.querySelector('.wa-label');
+    if (!label) return;
+    var original = label.textContent;
+    label.textContent = 'Ouverture de WhatsApp…';
+    link.classList.add('is-loading');
+    setTimeout(function(){
+      label.textContent = original;
+      link.classList.remove('is-loading');
+    }, 1500);
+  });
+
+  // Barre de navigation : devient opaque avec flou après un léger défilement.
+  var navbarEl = $('#navbar');
+  var navTicking = false;
+  function updateNavbar(){
+    navTicking = false;
+    navbarEl.classList.toggle('scrolled', window.scrollY > 30);
+  }
+  window.addEventListener('scroll', function(){
+    if (!navTicking) { window.requestAnimationFrame(updateNavbar); navTicking = true; }
+  }, { passive: true });
+  updateNavbar();
 
   // ------------------------------------------------------------------
   // Rafraîchissement automatique
@@ -723,11 +1013,9 @@
   // ------------------------------------------------------------------
   // Démarrage
   // ------------------------------------------------------------------
+  observeReveals();
   loadConfig({});
 })();
 </script>
 </body>
 </html>
-
-
-
