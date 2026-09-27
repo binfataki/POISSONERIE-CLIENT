@@ -380,7 +380,7 @@
       <img class="logo" src="logo.png" alt="Poissonnerie de l'Est">
       <h1 id="brand-name">Poissonnerie de l'Est</h1>
       <p class="subtitle" id="brand-subtitle">Makayabo yetu ya qualité, faites-nous confiance.</p>
-      <p class="hero-desc">Grossiste et revendeur de poisson salé &amp; makayabo. Parcourez notre sélection et commandez en quelques secondes, directement sur WhatsApp.</p>
+      <p class="hero-desc">Poisson salé &amp; makayabo de qualité, prêts pour votre cuisine. Parcourez notre sélection et commandez en quelques secondes, directement sur WhatsApp.</p>
       <a href="#catalog" class="hero-cta">
         <span>Découvrir nos produits</span>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
@@ -536,7 +536,7 @@
   // ------------------------------------------------------------------
   var OWNER_CODE = "4321";
   var REFRESH_INTERVAL_MS = 3 * 60 * 1000; // 3 minutes
-  var DEFAULT_API_URL = "https://script.google.com/macros/s/AKfycbzUe0Qezr6dmpkphnx_ARzbOdVvli3q2FycS1IcDgIW7ZXQ0iElQ6gBs8QPF2qWrsZT/exec";
+  var DEFAULT_API_URL = "https://script.google.com/macros/s/AKfycbzOA1WrDQs1HZvbkcrS4LrK9upJnJI0PzPk_Dx-9vuwbYkx6kOrVBhgwevXhPYEGAoC/exec";
 
   var LS_API_URL   = "pde_client_api_url_v1";
   var LS_CONFIG    = "pde_client_config_cache_v1";
@@ -578,7 +578,8 @@
   function apiUrl(){
     var saved = localStorage.getItem(LS_API_URL) || '';
     var oldDeployments = [
-      'https://script.google.com/macros/s/AKfycbyLsY3-J7D1JBKRTWYW29ldO-CMNnMKWf6NEagr5vXfmT3xcAtg2U2O0Jr0UJW9Ynpb/exec'
+      'https://script.google.com/macros/s/AKfycbyLsY3-J7D1JBKRTWYW29ldO-CMNnMKWf6NEagr5vXfmT3xcAtg2U2O0Jr0UJW9Ynpb/exec',
+      'https://script.google.com/macros/s/AKfycbzUe0Qezr6dmpkphnx_ARzbOdVvli3q2FycS1IcDgIW7ZXQ0iElQ6gBs8QPF2qWrsZT/exec'
     ];
     if (!saved || oldDeployments.indexOf(saved) !== -1) {
       localStorage.removeItem(LS_API_URL);
